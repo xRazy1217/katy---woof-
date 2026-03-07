@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="">
+    <title>Productos - Katy & Woof Creative Studio</title>
+    <meta name="description" content="Descubre nuestra colección de productos para mascotas. Calidad premium y diseños únicos para tu compañero peludo.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Productos - Katy & Woof Creative Studio">
+    <meta property="og:description" content="Descubre nuestra colección de productos para mascotas">
+    <meta property="og:image" content="/images/og-products.jpg">
+    <meta property="og:url" content="/ecommerce/products.html">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="logo">Katy & Woof</a>
+
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Inicio</a>
+                <a href="/productos.html" class="nav-link active">Productos</a>
+                <a href="/servicios.html" class="nav-link">Servicios</a>
+                <a href="/galeria.html" class="nav-link">Galería</a>
+                <a href="/contacto.html" class="nav-link">Contacto</a>
+                <a href="#" class="cart-icon" id="cart-icon">
+                    🛒
+                    <span class="cart-count" style="display: none;">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Productos para Mascotas</h1>
+            <p>Descubre nuestra colección exclusiva de productos premium diseñados especialmente para tu compañero peludo</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Products Section -->
+        <section class="products-section">
+            <!-- Products Header -->
+            <div class="products-header">
+                <h2 class="products-title">Nuestros Productos</h2>
+
+                <!-- Toolbar -->
+                <div class="products-toolbar">
+                    <!-- Search -->
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            id="product-search"
+                            placeholder="Buscar productos..."
+                            class="search-input"
+                        >
+                        <button class="search-btn">🔍</button>
+                    </div>
+
+                    <!-- Filters Toggle (Mobile) -->
+                    <button class="btn btn-outline filters-toggle" id="filters-toggle">
+                        Filtros
+                    </button>
+
+                    <!-- Sort -->
+                    <select id="sort-select" class="sort-select">
+                        <option value="date">Más recientes</option>
+                        <option value="title">Nombre A-Z</option>
+                        <option value="price">Precio: menor a mayor</option>
+                        <option value="price-desc">Precio: mayor a menor</option>
+                        <option value="rating">Mejor valorados</option>
+                        <option value="popularity">Más populares</option>
+                    </select>
+
+                    <!-- View Mode -->
+                    <div class="view-mode">
+                        <button class="view-btn active" data-view="grid">⊞</button>
+                        <button class="view-btn" data-view="list">☰</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar" id="filters-sidebar">
+                <div class="filters-content">
+                    <div class="filters-header">
+                        <h3>Filtros</h3>
+                        <button class="filters-close" id="filters-close">✕</button>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="filter-group">
+                        <h4>Categorías</h4>
+                        <div class="filter-options" id="categories-list">
+                            <label class="filter-option">
+                                <input type="radio" name="category" value="" checked>
+                                <span>Todas las categorías</span>
+                            </label>
+                            <!-- Categories will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="filter-group">
+                        <h4>Rango de Precio</h4>
+                        <div class="price-range">
+                            <input type="number" id="min-price" placeholder="Mínimo" class="price-input">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="Máximo" class="price-input">
+                        </div>
+                        <button class="btn btn-sm" id="apply-price-filter">Aplicar</button>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="filter-group">
+                        <h4>Disponibilidad</h4>
+                        <label class="filter-option">
+                            <input type="checkbox" id="in-stock-only">
+                            <span>Solo productos en stock</span>
+                        </label>
+                    </div>
+
+                    <!-- Featured -->
+                    <div class="filter-group">
+                        <h4>Especiales</h4>
+                        <label class="filter-option">
+                            <input type="checkbox" id="featured-only">
+                            <span>Solo productos destacados</span>
+                        </label>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button class="btn btn-outline clear-filters" id="clear-filters">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="products-container">
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be loaded dynamically -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <span>Cargando productos...</span>
+                    </div>
+                </div>
+
+                <!-- Load More -->
+                <div class="load-more-container">
+                    <button class="btn btn-outline" id="load-more-btn" style="display: none;">
+                        Cargar Más Productos
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Katy & Woof</h3>
+                <p>Estudio creativo especializado en retratos artísticos de mascotas. Creamos recuerdos únicos que durarán para siempre.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/productos.html">Productos</a></li>
+                    <li><a href="/servicios.html">Servicios</a></li>
+                    <li><a href="/galeria.html">Galería</a></li>
+                    <li><a href="/contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>📧 info@katywoof.com</p>
+                <p>📱 +57 300 123 4567</p>
+                <p>📍 Bogotá, Colombia</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">📘 Facebook</a>
+                    <a href="#" class="social-link">📷 Instagram</a>
+                    <a href="#" class="social-link">🐦 Twitter</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Katy & Woof Creative Studio. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Quick View Modal -->
+    <div class="modal" id="quick-view-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Vista Rápida</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="quick-view-content">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar" style="display: none;">
+        <div class="cart-header">
+            <h3>Carrito de Compras</h3>
+            <button class="cart-close">&times;</button>
+        </div>
+        <div class="cart-body" id="cart-content">
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <p>Tu carrito está vacío</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="cart-total-amount">$0</span>
+            </div>
+            <button class="btn btn-primary checkout-btn" disabled>
+                Ir al Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/ui.js"></script>
+
+    <script>
+        // Inicialización específica de la página de productos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar búsqueda
+            const searchInput = document.getElementById('product-search');
+            const searchBtn = document.querySelector('.search-btn');
+
+            function performSearch() {
+                const query = searchInput.value.trim();
+                window.KatyEcommerce.Products.search(query);
+            }
+
+            searchInput.addEventListener('input', Utils.debounce(performSearch, 300));
+            searchBtn.addEventListener('click', performSearch);
+
+            // Inicializar filtros
+            document.getElementById('filters-toggle').addEventListener('click', function() {
+                document.getElementById('filters-sidebar').classList.add('active');
+            });
+
+            document.getElementById('filters-close').addEventListener('click', function() {
+                document.getElementById('filters-sidebar').classList.remove('active');
+            });
+
+            // Inicializar ordenamiento
+            document.getElementById('sort-select').addEventListener('change', function(e) {
+                window.KatyEcommerce.Products.applyFilters({ orderby: e.target.value });
+            });
+
+            // Inicializar vista
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // Implementar cambio de vista
+                });
+            });
+
+            // Inicializar filtros de precio
+            document.getElementById('apply-price-filter').addEventListener('click', function() {
+                const minPrice = document.getElementById('min-price').value;
+                const maxPrice = document.getElementById('max-price').value;
+
+                window.KatyEcommerce.Products.applyFilters({
+                    min_price: minPrice ? parseFloat(minPrice) : undefined,
+                    max_price: maxPrice ? parseFloat(maxPrice) : undefined
+                });
+            });
+
+            // Inicializar filtros de stock y destacados
+            document.getElementById('in-stock-only').addEventListener('change', function(e) {
+                window.KatyEcommerce.Products.applyFilters({
+                    in_stock: e.target.checked || undefined
+                });
+            });
+
+            document.getElementById('featured-only').addEventListener('change', function(e) {
+                window.KatyEcommerce.Products.applyFilters({
+                    featured: e.target.checked || undefined
+                });
+            });
+
+            // Limpiar filtros
+            document.getElementById('clear-filters').addEventListener('click', function() {
+                document.getElementById('min-price').value = '';
+                document.getElementById('max-price').value = '';
+                document.getElementById('in-stock-only').checked = false;
+                document.getElementById('featured-only').checked = false;
+                document.querySelector('input[name="category"]:checked').checked = false;
+                document.querySelector('input[name="category"][value=""]').checked = true;
+
+                window.KatyEcommerce.Products.applyFilters({
+                    category: undefined,
+                    min_price: undefined,
+                    max_price: undefined,
+                    in_stock: undefined,
+                    featured: undefined
+                });
+            });
+
+            // Cargar categorías
+            window.KatyEcommerce.API.get('/products.php?action=categories')
+                .then(response => {
+                    if (response.success) {
+                        const categoriesList = document.getElementById('categories-list');
+                        response.data.forEach(category => {
+                            const label = document.createElement('label');
+                            label.className = 'filter-option';
+                            label.innerHTML = `
+                                <input type="radio" name="category" value="${category.id}">
+                                <span>${category.name}</span>
+                                ${category.count ? `<small>(${category.count})</small>` : ''}
+                            `;
+                            categoriesList.appendChild(label);
+                        });
+
+                        // Event listeners para categorías
+                        document.querySelectorAll('input[name="category"]').forEach(input => {
+                            input.addEventListener('change', function() {
+                                window.KatyEcommerce.Products.applyFilters({
+                                    category: this.value || undefined
+                                });
+                            });
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading categories:', error));
+        });
+    </script>
+</body>
+</html>

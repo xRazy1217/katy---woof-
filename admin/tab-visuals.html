@@ -1,0 +1,23 @@
+<!-- Admin Visuals Tab Component -->
+<div id="tab-visuals" class="tab-content hidden">
+    <div class="grid lg:grid-cols-2 gap-12">
+        <div class="glass-card p-10 rounded-[3rem] space-y-6">
+            <h2 class="text-xl serif font-bold border-b border-stone-100 pb-4">Home Hero</h2>
+            <input type="text" id="id-hero_title" class="form-input" placeholder="Título Hero">
+            <textarea id="id-hero_description" class="form-input" rows="3" placeholder="Descripción Hero"></textarea>
+            <div class="space-y-2">
+                <div class="h-32 bg-stone-50 rounded-xl flex items-center justify-center p-2 overflow-hidden"><img id="preview-hero_image" class="max-w-full h-full object-cover"></div>
+                <input type="file" id="hero-image-input" class="text-[9px]" accept="image/*">
+            </div>
+        </div>
+        <div class="glass-card p-10 rounded-[3rem] space-y-6">
+            <h2 class="text-xl serif font-bold border-b border-stone-100 pb-4">Sección Nosotros</h2>
+            <input type="text" id="id-nosotros_title" class="form-input" placeholder="Título Nosotros">
+            <div class="space-y-2">
+                <div class="h-32 bg-stone-50 rounded-xl flex items-center justify-center p-2 overflow-hidden"><img id="preview-nosotros_image" class="max-w-full h-full object-cover"></div>
+                <input type="file" id="nosotros-image-input" class="text-[9px]" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <button onclick="AdminTaxonomy.saveVisualSettings()" class="w-full mt-8 py-5 btn-magic rounded-xl font-bold uppercase text-[10px]">Guardar Cambios Visuales</button>
+</div>

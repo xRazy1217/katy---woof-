@@ -1,0 +1,22 @@
+<!-- Admin Process Tab Component -->
+<div id="tab-proceso" class="tab-content hidden">
+    <div class="grid lg:grid-cols-2 gap-12">
+        <div id="proceso-form-container" class="glass-card p-8 rounded-[2.5rem]">
+            <h2 id="proceso-title-form" class="text-xl serif font-bold mb-6">Paso del Proceso</h2>
+            <form id="process-form" class="space-y-4">
+                <input type="hidden" id="process-id">
+                <input type="number" id="step-number" placeholder="Orden" class="form-input">
+                <input type="text" id="step-title" placeholder="Título" class="form-input">
+                <textarea id="step-description" rows="3" placeholder="Descripción" class="form-input"></textarea>
+                <input type="file" id="step-file" class="form-input" accept="image/*">
+                <img id="step-preview" class="hidden w-full h-48 object-cover rounded-lg border-2 border-soft-blue" alt="Preview">
+                <div id="step-file-info" class="hidden p-3 rounded-lg bg-stone-50 border-l-4 border-soft-blue text-sm"></div>
+                <div class="flex flex-col gap-2">
+                    <button type="button" id="process-submit-btn" onclick="AdminContent.saveProcessStep()" class="w-full py-4 btn-magic rounded-xl font-bold uppercase text-[10px]">Guardar Paso</button>
+                    <button type="button" id="process-cancel-btn" onclick="AdminContent.cancelEdit('proceso')" class="hidden w-full py-3 bg-stone-100 text-stone-500 rounded-xl font-bold uppercase text-[9px]">Cancelar Edición</button>
+                </div>
+            </form>
+        </div>
+        <div id="process-list" class="space-y-4"></div>
+    </div>
+</div>

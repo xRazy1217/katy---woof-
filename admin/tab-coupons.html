@@ -1,0 +1,49 @@
+<!-- Admin Coupons Tab Component -->
+<div id="tab-coupons" class="tab-content hidden">
+    <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Coupon Form -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="glass-card p-6 rounded-[2rem]">
+                <h2 id="coupon-form-title" class="text-xl serif font-bold mb-6">Nuevo Cupón</h2>
+                <form id="coupon-form" class="space-y-4">
+                    <input type="hidden" id="coupon-id">
+                    <input type="text" id="coupon-code" placeholder="Código del cupón" class="form-input" required>
+                    <textarea id="coupon-description" rows="2" placeholder="Descripción" class="form-input"></textarea>
+
+                    <select id="coupon-type" class="form-input" onchange="CouponAdmin.updateTypeFields()">
+                        <option value="fixed">Descuento fijo</option>
+                        <option value="percentage">Descuento porcentual</option>
+                    </select>
+
+                    <input type="number" id="coupon-value" placeholder="Valor del descuento" class="form-input" step="0.01" required>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="coupon-usage-limit" placeholder="Límite de uso" class="form-input" min="1">
+                        <input type="number" id="coupon-min-amount" placeholder="Monto mínimo" class="form-input" step="0.01" min="0">
+                    </div>
+
+                    <input type="date" id="coupon-expiry" class="form-input">
+
+                    <div class="flex gap-2">
+                        <button type="button" id="coupon-submit-btn" onclick="CouponAdmin.save()" class="flex-1 py-3 btn-magic rounded-xl font-bold uppercase text-[10px]">
+                            Crear Cupón
+                        </button>
+                        <button type="button" id="coupon-cancel-btn" onclick="CouponAdmin.cancelEdit()" class="hidden py-3 bg-stone-100 text-stone-500 rounded-xl font-bold uppercase text-[9px]">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Coupons List -->
+        <div class="lg:col-span-2">
+            <div class="glass-card p-6 rounded-[2rem]">
+                <h2 class="text-xl serif font-bold mb-6">Cupones de Descuento</h2>
+                <div id="coupons-admin-list" class="space-y-3">
+                    <!-- Coupons will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
