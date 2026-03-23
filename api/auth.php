@@ -7,9 +7,10 @@
 class Auth {
     private static $master_key = 'Asesor25';
     private static $protected_actions = [
-        'save_settings', 'save_portfolio', 'save_service', 'save_blog',
-        'save_process', 'save_list_item', 'delete_service', 'delete_blog',
-        'delete_portfolio', 'delete_list_item', 'delete_process', 'sync_database', 'repair_database'
+        'save_settings', 'save_portfolio', 'save_blog',
+        'save_process', 'save_list_item', 'delete_blog',
+        'delete_portfolio', 'delete_list_item', 'delete_process', 'sync_database', 'repair_database',
+        'ecommerce_init', 'initialize_database'
     ];
 
     public static function isAuthorized($auth_key) {

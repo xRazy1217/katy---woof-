@@ -14,10 +14,30 @@ class SchemaManager {
     private $pdo;
     private $idealSchema;
     private $errors = [];
+    private $connectionError = null;
     
     public function __construct() {
-        $this->pdo = getDBConnection();
-        $this->idealSchema = require __DIR__ . '/../schema-definition.php';
+        try {
+            $this->pdo = getDBConnectionOrThrow();
+            $this->idealSchema = require __DIR__ . '/../schema-definition.php';
+        } catch (Exception $e) {
+            $this->connectionError = $e->getMessage();
+            $this->pdo = null;
+        }
+    }
+    
+    /**
+     * Verifica si hay error de conexión
+     */
+    public function hasConnectionError() {
+        return $this->connectionError !== null;
+    }
+    
+    /**
+     * Obtiene el mensaje de error de conexión
+     */
+    public function getConnectionError() {
+        return $this->connectionError;
     }
 
     /**
@@ -27,6 +47,10 @@ class SchemaManager {
      * @return array Estructura actual (nombre => tipo de dato)
      */
     public function getTableStructure($tableName) {
+        if ($this->hasConnectionError()) {
+            return [];
+        }
+        
         try {
             $query = "
                 SELECT COLUMN_NAME, COLUMN_TYPE 
@@ -54,6 +78,10 @@ class SchemaManager {
      * @return bool
      */
     public function tableExists($tableName) {
+        if ($this->hasConnectionError()) {
+            return false;
+        }
+        
         try {
             $query = "SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
             $stmt = $this->pdo->prepare($query);
@@ -71,6 +99,13 @@ class SchemaManager {
      * @return array Reporte detallado con estado de cada tabla
      */
     public function auditSchema() {
+        if ($this->hasConnectionError()) {
+            return [
+                'success' => false,
+                'error' => 'Error de conexión: ' . $this->getConnectionError()
+            ];
+        }
+        
         $report = [
             'database' => DB_NAME,
             'timestamp' => date('Y-m-d H:i:s'),
@@ -227,6 +262,12 @@ class SchemaManager {
             'columns_added' => 0,
             'changes_required' => false
         ];
+        
+        if ($this->hasConnectionError()) {
+            $result['message'] = 'Error de conexión: ' . $this->getConnectionError();
+            $result['errors'][] = $this->getConnectionError();
+            return $result;
+        }
 
         try {
             // Iniciar transacción
@@ -286,6 +327,14 @@ class SchemaManager {
      * @return array Información de conexión
      */
     public function testConnection() {
+        // Si hubo error de conexión en el constructor
+        if ($this->hasConnectionError()) {
+            return [
+                'success' => false,
+                'error' => $this->getConnectionError()
+            ];
+        }
+        
         try {
             $stmt = $this->pdo->query("SELECT VERSION() as version");
             $versionRow = $stmt->fetch(PDO::FETCH_ASSOC);

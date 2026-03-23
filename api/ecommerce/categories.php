@@ -1,6 +1,9 @@
 <?php
-require_once '../config.php';
-require_once '../ecommerce-config.php';
+require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../ecommerce-config.php';
+
+// Get database connection
+$conn = EcommerceDatabase::getInstance()->getConnection();
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -18,7 +21,13 @@ $request = $_SERVER['REQUEST_URI'];
 // Remove query string and decode
 $path = parse_url($request, PHP_URL_PATH);
 $path = str_replace('/api/ecommerce/categories', '', $path);
+$path = str_replace('.php', '', $path);
 $path = trim($path, '/');
+
+// Check for ID in query string if no path parameter
+if (empty($path) && isset($_GET['id'])) {
+    $path = $_GET['id'];
+}
 
 // Handle different endpoints
 if ($method === 'GET') {

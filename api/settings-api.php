@@ -8,13 +8,73 @@ require_once 'database.php';
 require_once 'image-handler.php';
 
 class SettingsAPI {
+    private static function normalizeImageSettingPath($key, $value) {
+        $defaultByKey = [
+            'site_favicon' => '/img/favicon.svg',
+            'site_logo' => '/img/placeholder.svg',
+            'hero_image' => '/img/placeholder.svg',
+            'nosotros_image' => '/img/placeholder.svg'
+        ];
+
+        $defaultPath = $defaultByKey[$key] ?? '/img/placeholder.svg';
+        $raw = trim((string)$value);
+        if ($raw === '') {
+            return $defaultPath;
+        }
+
+        // URL remota: se respeta.
+        if (preg_match('/^https?:\/\//i', $raw)) {
+            return $raw;
+        }
+
+        $trimmed = ltrim($raw, '/');
+        if ($trimmed === 'img/placeholder.jpg' || $trimmed === 'img/placeholder.jpeg') {
+            return '/img/placeholder.svg';
+        }
+
+        $candidates = [];
+        if (strpos($trimmed, '/') !== false) {
+            $candidates[] = '/' . $trimmed;
+        } else {
+            // Compatibilidad con rutas legacy guardadas como nombre de archivo suelto.
+            $candidates[] = '/uploads/' . $trimmed;
+            $candidates[] = '/' . $trimmed;
+        }
+
+        $projectRoot = realpath(__DIR__ . '/..');
+        foreach ($candidates as $publicPath) {
+            if (!$projectRoot) {
+                continue;
+            }
+
+            $fsPath = $projectRoot . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($publicPath, '/'));
+            if (is_file($fsPath)) {
+                return $publicPath;
+            }
+        }
+
+        return $defaultPath;
+    }
+
     public static function get() {
         $pdo = Database::getConnection();
         try {
-            return $pdo->query("SELECT * FROM site_settings")->fetchAll();
+            $rows = $pdo->query("SELECT * FROM site_settings")->fetchAll();
+            foreach ($rows as &$row) {
+                if (in_array($row['setting_key'], ['site_logo', 'site_favicon', 'hero_image', 'nosotros_image'], true)) {
+                    $row['setting_value'] = self::normalizeImageSettingPath($row['setting_key'], $row['setting_value']);
+                }
+            }
+            return $rows;
         } catch (Exception $e) {
             Database::runSetup();
-            return $pdo->query("SELECT * FROM site_settings")->fetchAll();
+            $rows = $pdo->query("SELECT * FROM site_settings")->fetchAll();
+            foreach ($rows as &$row) {
+                if (in_array($row['setting_key'], ['site_logo', 'site_favicon', 'hero_image', 'nosotros_image'], true)) {
+                    $row['setting_value'] = self::normalizeImageSettingPath($row['setting_key'], $row['setting_value']);
+                }
+            }
+            return $rows;
         }
     }
 
@@ -38,7 +98,8 @@ class SettingsAPI {
 
                 $res = ImageHandler::optimizeAndSaveImage($files[$f], "brand_{$f}");
                 if ($res['success']) {
-                    $upsertStmt->execute([$f, $res['path']]);
+                    $normalizedPath = '/' . ltrim((string)$res['path'], '/');
+                    $upsertStmt->execute([$f, $normalizedPath]);
                     ImageHandler::deletePhysicalFile($old_path);
                 } else {
                     return $res;

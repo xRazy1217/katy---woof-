@@ -1,49 +1,53 @@
 <?php
 /**
- * Katy & Woof - Configuración Maestra SiteGround & Helper v6.0
+ * Katy & Woof - Configuración Maestra v8.0
  */
 
-// ========================================
-// Cargar variables desde .env si existe
-// ========================================
-function loadEnv($filePath = __DIR__ . '/.env') {
-    if (!file_exists($filePath)) {
-        return [];
-    }
-    
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+// ── Cargar .env ──
+function loadEnv(string $filePath = ''): array {
+    if (!$filePath) $filePath = __DIR__ . '/.env';
+    if (!file_exists($filePath)) return [];
     $env = [];
-    
-    foreach ($lines as $line) {
-        // Saltar comentarios y líneas vacías
-        if (strpos(trim($line), '#') === 0 || empty(trim($line))) {
-            continue;
-        }
-        
-        // Parsear línea: KEY=VALUE
-        if (strpos($line, '=') !== false) {
-            list($key, $value) = explode('=', $line, 2);
-            $key = trim($key);
-            $value = trim($value);
-            
-            // Remover comillas si existen
-            $value = trim($value, '"\'');
-            
-            $env[$key] = $value;
-        }
+    foreach (file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+        [$k, $v] = explode('=', $line, 2);
+        $env[trim($k)] = trim(trim($v), "\"'");
     }
-    
     return $env;
 }
 
-// Cargar .env
 $envVars = loadEnv();
 
-// Definir constantes de base de datos (priorizar .env, usar valores por defecto como fallback)
-define('DB_HOST', $envVars['DB_HOST'] ?? 'localhost'); 
-define('DB_NAME', $envVars['DB_NAME'] ?? 'dbyh6du0yfle1i');
-define('DB_USER', $envVars['DB_USER'] ?? 'uiuxyllculkca');
-define('DB_PASS', $envVars['DB_PASS'] ?? 'l2k13l3~1@&s'); 
+// ── Base de datos ──
+define('DB_HOST', $envVars['DB_HOST'] ?? 'localhost');
+define('DB_NAME', $envVars['DB_NAME'] ?? 'katywoof_ecommerce');
+define('DB_USER', $envVars['DB_USER'] ?? 'root');
+define('DB_PASS', $envVars['DB_PASS'] ?? '');
+
+// ── Entorno ──
+define('APP_ENV',  $envVars['APP_ENV']  ?? 'development');   // 'production' en SiteGround
+define('APP_URL',  rtrim($envVars['APP_URL'] ?? self_detect_url(), '/'));
+define('ADMIN_KEY',$envVars['ADMIN_AUTH_KEY'] ?? 'Asesor25');
+define('UNIFIED_CATALOG', ($envVars['UNIFIED_CATALOG'] ?? 'true') === 'true');
+
+// ── Detectar URL base automáticamente ──
+function self_detect_url(): string {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    // Subir hasta la raíz del proyecto (donde está config.php)
+    $base   = rtrim(dirname(dirname($script)), '/');
+    return $scheme . '://' . $host . ($base === '/' ? '' : $base);
+}
+
+// ── Errores: solo mostrar en development ──
+if (APP_ENV === 'development') {
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', 0);
+    error_reporting(0);
+}
 
 function getDBConnection() {
     try {
@@ -71,6 +75,36 @@ function getDBConnection() {
         header('Content-Type: application/json', true, 500);
         echo json_encode(['success' => false, 'error' => "Error de Conexión DB: " . $e->getMessage()]);
         exit;
+    }
+}
+
+// Versión alternativa que lanza excepción en lugar de exit (para SchemaManager)
+function getDBConnectionOrThrow() {
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => true,
+    ];
+    
+    try {
+        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        $pdo->exec("SET NAMES utf8mb4");
+        return $pdo;
+    } catch (PDOException $e) {
+        // Si falla con localhost, intentamos con 127.0.0.1
+        if (DB_HOST === 'localhost') {
+            try {
+                $dsn = "mysql:host=127.0.0.1;dbname=" . DB_NAME;
+                $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+                $pdo->exec("SET NAMES utf8mb4");
+                return $pdo;
+            } catch (PDOException $e2) {
+                // Si ambos fallan, lanzamos el error original
+                throw $e;
+            }
+        }
+        throw $e;
     }
 }
 

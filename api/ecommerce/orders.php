@@ -1,6 +1,9 @@
 <?php
-require_once '../config.php';
-require_once '../ecommerce-config.php';
+require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../ecommerce-config.php';
+
+// Get database connection
+$conn = EcommerceDatabase::getInstance()->getConnection();
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -18,7 +21,18 @@ $request = $_SERVER['REQUEST_URI'];
 // Remove query string and decode
 $path = parse_url($request, PHP_URL_PATH);
 $path = str_replace('/api/ecommerce/orders', '', $path);
+$path = str_replace('.php', '', $path);
 $path = trim($path, '/');
+
+// Check for parameters in query string
+if (empty($path) && isset($_GET['id'])) {
+    $path = $_GET['id'];
+    if (isset($_GET['action']) && $_GET['action'] === 'status') {
+        $path .= '/status';
+    }
+} elseif (empty($path) && isset($_GET['action'])) {
+    $path = $_GET['action'];
+}
 
 // Handle different endpoints
 if ($method === 'GET') {
@@ -153,7 +167,26 @@ function getOrderItems($orderId) {
 
         $stmt = $conn->prepare($query);
         $stmt->execute([$orderId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Restructure to have product object
+        $formattedItems = [];
+        foreach ($items as $item) {
+            $formattedItems[] = [
+                'id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'line_total' => $item['line_total'],
+                'product' => [
+                    'id' => $item['product_id'],
+                    'name' => $item['name'],
+                    'sku' => $item['sku'],
+                    'image_url' => $item['image_url']
+                ]
+            ];
+        }
+        
+        return $formattedItems;
     } catch (Exception $e) {
         return [];
     }

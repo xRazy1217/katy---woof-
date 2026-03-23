@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files (contienen credenciales sensibles)
+.env
+.env.local
+.env.*.local

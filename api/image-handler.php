@@ -22,8 +22,9 @@ class ImageHandler {
 
     /**
      * Optimiza y guarda una imagen subida con validaciones de seguridad mejoradas
+     * Acepta parámetro opcional quality (70-95) para personalizar compresión
      */
-    public static function optimizeAndSaveImage($file, $prefix) {
+    public static function optimizeAndSaveImage($file, $prefix, $quality = null) {
         $max_size = 10 * 1024 * 1024; // 10MB
         $allowed_types = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
@@ -52,7 +53,8 @@ class ImageHandler {
         // decide extension and filename base
         $ext_map = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
         $ext = isset($ext_map[$mime_type]) ? $ext_map[$mime_type] : 'dat';
-        $new_name = $prefix . "_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
+        $base_name = $prefix . "_" . time() . "_" . bin2hex(random_bytes(4));
+        $new_name = $base_name . "." . $ext;
         $target_path = self::$upload_dir . $new_name;
 
         try {
@@ -85,6 +87,9 @@ class ImageHandler {
                     $image = imagecreatefrompng($tmp_name);
                     break;
                 case 'image/webp':
+                    if (!function_exists('imagecreatefromwebp')) {
+                        return ["success" => false, "error" => "El servidor no soporta lectura WebP."];
+                    }
                     $image = imagecreatefromwebp($tmp_name);
                     break;
                 case 'image/gif':
@@ -122,12 +127,19 @@ class ImageHandler {
             }
 
             // Guardar como WebP si está soportado, sino mantener formato original
-            $quality = self::getOptimalQuality($width, $height);
+            // Usar qualidad personalizada si viene, sino usar la óptima automática
+            if ($quality === null) {
+                $quality = self::getOptimalQuality($width, $height);
+            } else {
+                // Asegurar que está en rango válido (70-95)
+                $quality = max(70, min(95, (int)$quality));
+            }
+            
             $saved = false;
 
             if (function_exists('imagewebp')) {
+                $target_path = self::$upload_dir . $base_name . '.webp';
                 $saved = imagewebp($image, $target_path, $quality);
-                $target_path = preg_replace('/\.(jpg|png|gif)$/i', '.webp', $target_path);
             } else {
                 // Fallback al formato original
                 switch ($mime_type) {
@@ -141,7 +153,7 @@ class ImageHandler {
                         $saved = imagegif($image, $target_path);
                         break;
                     case 'image/webp':
-                        $saved = imagewebp($image, $target_path, $quality);
+                        return ["success" => false, "error" => "El servidor no soporta escritura WebP."];
                         break;
                 }
             }
@@ -157,6 +169,21 @@ class ImageHandler {
         } catch (Exception $e) {
             return ["success" => false, "error" => "Error procesando imagen: " . $e->getMessage()];
         }
+    }
+    
+    /**
+     * Versión estática que acepta parámetro quality desde FormData
+     */
+    public static function optimizeAndSaveImageWithQuality($file, $prefix) {
+        // Buscar quality en $_POST o $_REQUEST
+        $quality = null;
+        if (!empty($_POST['image_quality'])) {
+            $quality = (int)$_POST['image_quality'];
+        } elseif (!empty($_REQUEST['image_quality'])) {
+            $quality = (int)$_REQUEST['image_quality'];
+        }
+        
+        return self::optimizeAndSaveImage($file, $prefix, $quality);
     }
 
     /**

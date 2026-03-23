@@ -42,11 +42,11 @@ class BlogAPI {
             }
         } else {
             // Insert
-            $img = 'img/placeholder.jpg';
+            $img = '/img/placeholder.svg';
             if(isset($files['file']) && $files['file']['error'] !== UPLOAD_ERR_NO_FILE){
                 $res = ImageHandler::optimizeAndSaveImage($files['file'], "blog");
                 if ($res['success']) {
-                    $img = $res['path'];
+                    $img = '/' . ltrim((string)$res['path'], '/');
                 } else {
                     return $res;
                 }

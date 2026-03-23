@@ -1,0 +1,16 @@
+@media (max-width: 900px) {
+  .catalog-sidebar {
+    display: none;
+  }
+  main .container > div[style*="grid-template-columns:260px"] {
+    grid-template-columns: 1fr !important;
+  }
+  #productsGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  #productsGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
