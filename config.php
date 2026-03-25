@@ -25,10 +25,15 @@ define('DB_USER', $envVars['DB_USER'] ?? 'root');
 define('DB_PASS', $envVars['DB_PASS'] ?? '');
 
 // ── Entorno ──
-define('APP_ENV',  $envVars['APP_ENV']  ?? 'development');   // 'production' en SiteGround
+define('APP_ENV',  $envVars['APP_ENV']  ?? 'development');
 define('APP_URL',  rtrim($envVars['APP_URL'] ?? self_detect_url(), '/'));
 define('ADMIN_KEY',$envVars['ADMIN_AUTH_KEY'] ?? 'Asesor25');
 define('UNIFIED_CATALOG', ($envVars['UNIFIED_CATALOG'] ?? 'true') === 'true');
+
+// ── Flow Payment ──
+define('FLOW_API_KEY',    $envVars['FLOW_API_KEY']    ?? '');
+define('FLOW_SECRET_KEY', $envVars['FLOW_SECRET_KEY'] ?? '');
+define('FLOW_SANDBOX',    ($envVars['FLOW_SANDBOX']   ?? 'true') === 'true');
 
 // ── Detectar URL base automáticamente ──
 function self_detect_url(): string {

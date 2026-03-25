@@ -31,13 +31,12 @@ $adminKey = ADMIN_KEY;
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Katy & Woof</title>
-<link rel="stylesheet" href="../css/admin.css" onerror="this.href='css/admin.css'">
 <link rel="stylesheet" href="css/admin.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script>
-  const API   = '<?php echo $apiBase; ?>';
-  const AKEY  = '<?php echo $adminKey; ?>';
-  const ENV   = '<?php echo $env; ?>';
+  const API   = <?php echo json_encode($apiBase, JSON_UNESCAPED_SLASHES); ?>;
+  const AKEY  = <?php echo json_encode($adminKey); ?>;
+  const ENV   = <?php echo json_encode($env); ?>;
 </script>
 </head>
 <body>
@@ -92,6 +91,20 @@ $adminKey = ADMIN_KEY;
       </div>
       <div class="nav-item" data-panel="coupons">
         <i class="fa fa-ticket"></i> Cupones
+      </div>
+
+      <div class="nav-section-label">Contenido</div>
+      <div class="nav-item" data-panel="blog">
+        <i class="fa fa-pen-nib"></i> Blog
+      </div>
+
+      <div class="nav-section-label">Clientes</div>
+      <div class="nav-item" data-panel="customers">
+        <i class="fa fa-users"></i> Clientes
+      </div>
+      <div class="nav-item" data-panel="messages">
+        <i class="fa fa-envelope"></i> Mensajes
+        <span class="msg-badge" id="msgBadge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:0.6rem;padding:0.1rem 0.45rem;border-radius:100px"></span>
       </div>
 
       <div class="nav-section-label">Configuración</div>
@@ -298,6 +311,52 @@ $adminKey = ADMIN_KEY;
         </div>
       </div>
 
+      <!-- ── BLOG ── -->
+      <div class="panel" id="panel-blog">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <h2>Blog</h2>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnNewPost">
+            <i class="fa fa-plus"></i> Nuevo post
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="blogTable">
+            <thead>
+              <tr><th>Imagen</th><th>Título</th><th>Categoría</th><th>Fecha</th><th>Acciones</th></tr>
+            </thead>
+            <tbody><tr><td colspan="5" class="table-empty">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── CLIENTES ── -->
+      <div class="panel" id="panel-customers">
+        <div class="toolbar"><h2>Clientes</h2></div>
+        <div class="table-wrap">
+          <table class="data-table" id="customersTable">
+            <thead>
+              <tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Órdenes</th><th>Total gastado</th><th>Última orden</th></tr>
+            </thead>
+            <tbody><tr><td colspan="6" class="table-empty">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── MENSAJES ── -->
+      <div class="panel" id="panel-messages">
+        <div class="toolbar"><h2>Mensajes de contacto</h2></div>
+        <div class="table-wrap">
+          <table class="data-table" id="messagesTable">
+            <thead>
+              <tr><th>Nombre</th><th>Email</th><th>Asunto</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody><tr><td colspan="6" class="table-empty">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
     </div><!-- /admin-content -->
   </main>
 </div><!-- /admin-layout -->
@@ -452,6 +511,60 @@ $adminKey = ADMIN_KEY;
     <div class="modal-footer">
       <button class="btn btn-ghost" data-close="confirmModal">Cancelar</button>
       <button class="btn btn-danger" id="btnConfirmDelete"><i class="fa fa-trash"></i> Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Modal -->
+<div class="modal-overlay" id="blogModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="blogModalTitle">Nuevo Post</h3>
+      <button class="modal-close" data-close="blogModal"><i class="fa fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="blogId">
+      <div class="form-group"><label>Título *</label><input type="text" id="blogTitle" class="input" required></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="blogCategory" class="select">
+            <option>General</option>
+            <option>Consejos</option>
+            <option>Noticias</option>
+            <option>Arte</option>
+            <option>Mascotas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Contenido *</label><textarea id="blogContent" class="textarea" style="min-height:160px" required></textarea></div>
+      <div class="form-group">
+        <label>Imagen</label>
+        <div class="img-upload-area" id="blogImgArea">
+          <input type="file" id="blogImg" accept="image/*">
+          <img id="blogImgPreview" class="img-preview" src="" style="display:none">
+          <i class="fa fa-cloud-arrow-up" id="blogImgIcon"></i>
+          <p>Haz clic o arrastra una imagen</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-close="blogModal">Cancelar</button>
+      <button class="btn btn-primary" id="btnSavePost"><i class="fa fa-floppy-disk"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Message Detail Modal -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Mensaje de contacto</h3>
+      <button class="modal-close" data-close="messageModal"><i class="fa fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="messageModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-close="messageModal">Cerrar</button>
     </div>
   </div>
 </div>

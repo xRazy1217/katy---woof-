@@ -46,6 +46,30 @@ function formatPrice(n) {
 }
 
 /* ══════════════════════════════
+   THEME TOGGLE
+══════════════════════════════ */
+const ThemeManager = {
+  init() {
+    if(localStorage.getItem('kw_theme') === 'light') {
+      document.body.classList.add('light-theme');
+    }
+    this._updateIcon();
+  },
+  toggle() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('kw_theme', isLight ? 'light' : 'dark');
+    this._updateIcon();
+  },
+  _updateIcon() {
+    const icon = document.getElementById('themeIcon');
+    if(!icon) return;
+    const isLight = document.body.classList.contains('light-theme');
+    icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+};
+
+/* ══════════════════════════════
    CART MANAGER
 ══════════════════════════════ */
 const CartManager = {
@@ -182,5 +206,6 @@ const CartManager = {
    INIT
 ══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  ThemeManager.init();
   CartManager.init();
 });

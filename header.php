@@ -58,14 +58,20 @@ $base = APP_URL;
 <header class="site-header" id="siteHeader">
   <div class="container">
     <div class="header-inner">
-      <a href="<?php echo $base; ?>/" class="logo">KATY<span>&</span>WOOF</a>
+      <a href="<?php echo $base; ?>/" class="logo">
+        <img src="<?php echo $base; ?>/Logo_KW.png" alt="Katy &amp; Woof" style="height:38px;width:auto;object-fit:contain">
+      </a>
       <nav class="nav" id="mainNav">
         <a href="<?php echo $base; ?>/"            class="<?php echo $currentPage==='index'   ?'active':''; ?>">Inicio</a>
         <a href="<?php echo $base; ?>/catalogo.php" class="<?php echo $currentPage==='catalogo'?'active':''; ?>">Catálogo</a>
+        <a href="<?php echo $base; ?>/blog.php"     class="<?php echo $currentPage==='blog'    ?'active':''; ?>">Blog</a>
         <a href="<?php echo $base; ?>/nosotros.php" class="<?php echo $currentPage==='nosotros'?'active':''; ?>">Nosotros</a>
         <a href="<?php echo $base; ?>/contacto.php" class="<?php echo $currentPage==='contacto'?'active':''; ?>">Contacto</a>
       </nav>
       <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema" onclick="ThemeManager.toggle()">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
         <button class="cart-btn" onclick="CartManager.open()">
           <i class="fa-solid fa-bag-shopping"></i>
           <span>Carrito</span>

@@ -53,6 +53,7 @@ require_once __DIR__ . '/lists-api.php';
 require_once __DIR__ . '/schema-auditor.php';
 require_once __DIR__ . '/cart-api.php';
 require_once __DIR__ . '/checkout-api.php';
+require_once __DIR__ . '/messages-api.php';
 if (file_exists(__DIR__ . '/ecommerce-api.php')) {
     require_once __DIR__ . '/ecommerce-api.php';
 }
@@ -369,6 +370,29 @@ try {
                     'details' => $audit['tables'] ?? []
                 ]);
             }
+            break;
+
+        // ── MENSAJES ──
+        case 'get_messages':
+            echo json_encode(MessagesAPI::getAll());
+            break;
+
+        case 'send_message':
+            $body = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            echo json_encode(MessagesAPI::create($body));
+            break;
+
+        case 'mark_message_read':
+            echo json_encode(MessagesAPI::markRead($_GET['id'] ?? $_POST['id'] ?? 0));
+            break;
+
+        case 'delete_message':
+            echo json_encode(MessagesAPI::delete($_GET['id'] ?? $_POST['id'] ?? 0));
+            break;
+
+        // ── CLIENTES ──
+        case 'get_customers':
+            echo json_encode(CustomersAPI::getAll());
             break;
 
         // ── CARRITO ──

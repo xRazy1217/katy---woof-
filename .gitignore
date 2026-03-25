@@ -27,3 +27,15 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Uploads generados por usuarios
+uploads/*
+!uploads/.gitkeep
+!uploads/placeholder-product.svg
+
+# Exports de BD
+database-export.sql
+
+# Logs
+logs/*
+!logs/.gitkeep

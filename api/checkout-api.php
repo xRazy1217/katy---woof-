@@ -72,9 +72,10 @@ class CheckoutAPI {
     }
 
     private static function createFlowPayment(string $orderNumber, float $amount, string $email): array {
-        $apiKey    = $_ENV['FLOW_API_KEY']    ?? getenv('FLOW_API_KEY')    ?? '';
-        $secretKey = $_ENV['FLOW_SECRET_KEY'] ?? getenv('FLOW_SECRET_KEY') ?? '';
-        $sandbox   = ($_ENV['FLOW_SANDBOX']   ?? getenv('FLOW_SANDBOX')   ?? 'true') === 'true';
+        $apiKey    = defined('FLOW_API_KEY')    ? FLOW_API_KEY    : (getenv('FLOW_API_KEY')    ?: '');
+        $secretKey = defined('FLOW_SECRET_KEY') ? FLOW_SECRET_KEY : (getenv('FLOW_SECRET_KEY') ?: '');
+        $sandbox   = defined('FLOW_SANDBOX')    ? FLOW_SANDBOX    : (getenv('FLOW_SANDBOX')    ?: 'true');
+        $sandbox   = ($sandbox === true || $sandbox === 'true');
 
         if (!$apiKey || !$secretKey) {
             return ['success' => false, 'error' => 'Flow no configurado'];
@@ -133,9 +134,10 @@ class CheckoutAPI {
             $token = $params['token'] ?? '';
             if (!$token) return ['success' => false, 'error' => 'Token inválido'];
 
-            $apiKey    = $_ENV['FLOW_API_KEY']    ?? getenv('FLOW_API_KEY')    ?? '';
-            $secretKey = $_ENV['FLOW_SECRET_KEY'] ?? getenv('FLOW_SECRET_KEY') ?? '';
-            $sandbox   = ($_ENV['FLOW_SANDBOX']   ?? getenv('FLOW_SANDBOX')   ?? 'true') === 'true';
+            $apiKey    = defined('FLOW_API_KEY')    ? FLOW_API_KEY    : (getenv('FLOW_API_KEY')    ?: '');
+            $secretKey = defined('FLOW_SECRET_KEY') ? FLOW_SECRET_KEY : (getenv('FLOW_SECRET_KEY') ?: '');
+            $sandbox   = defined('FLOW_SANDBOX')    ? FLOW_SANDBOX    : (getenv('FLOW_SANDBOX')    ?: 'true');
+            $sandbox   = ($sandbox === true || $sandbox === 'true');
             $baseUrl   = $sandbox ? 'https://sandbox.flow.cl/api' : 'https://www.flow.cl/api';
 
             $p = ['apiKey' => $apiKey, 'token' => $token];

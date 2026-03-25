@@ -197,8 +197,9 @@ const Checkout = {
 
   async loadCart() {
     try {
+      const sid = localStorage.getItem('kw_session') || '';
       const res = await fetch(`${BASE}/api.php?action=cart_get`, {
-        headers: { 'X-Session-ID': CartManager.getSession() }
+        headers: { 'X-Session-ID': sid }
       });
       const data = await res.json();
       this.cartItems = data.items || [];
@@ -296,11 +297,12 @@ const Checkout = {
     const fd   = new FormData(form);
     const customer = {};
     fd.forEach((v,k) => customer[k] = v);
+    const sid = localStorage.getItem('kw_session') || '';
 
     try {
       const res = await fetch(`${BASE}/api.php?action=checkout_create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Session-ID': CartManager.getSession() },
+        headers: { 'Content-Type': 'application/json', 'X-Session-ID': sid },
         body: JSON.stringify({ customer })
       });
       const data = await res.json();

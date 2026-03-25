@@ -1,48 +1,32 @@
-Options -Indexes
-Options -ExecCGI
-
-# ── Proteger archivos sensibles ──
-<FilesMatch "^\.env|config\.php|composer\.(json|lock)$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# ── Proteger carpeta logs ──
-<FilesMatch "\.(log|txt)$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# ── Forzar HTTPS en producción ──
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# ── Rewrite para URLs limpias (opcional) ──
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# ── Headers de seguridad ──
+# Habilitar CORS para el API
 <IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set X-Frame-Options "SAMEORIGIN"
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>
 
-# ── Cache para assets estáticos ──
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css             "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/svg+xml        "access plus 1 month"
-    ExpiresByType image/jpeg           "access plus 1 month"
-    ExpiresByType image/png            "access plus 1 month"
-    ExpiresByType image/webp           "access plus 1 month"
+# Reescritura de URLs
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /katy-woof/
+
+    # Permitir acceso a archivos existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirigir todo al index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# ── Compresi\u00f3n Gzip ──
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/plain
+# Tipos MIME correctos
+<IfModule mod_mime.c>
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType image/svg+xml .svg
+    AddType application/json .json
 </IfModule>
+
+# Seguridad
+<Files ".env">
+    Require all denied
+</Files>

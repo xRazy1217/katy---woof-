@@ -128,10 +128,30 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const btn = document.getElementById('btnContact');
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
-  // Simulación — conectar con API de email si se desea
-  await new Promise(r => setTimeout(r, 1200));
-  document.getElementById('contactForm').style.display = 'none';
-  document.getElementById('contactSuccess').style.display = 'block';
+
+  const formData = new FormData(this);
+  const body = Object.fromEntries(formData.entries());
+
+  try {
+    const res = await fetch('<?php echo APP_URL; ?>/api/router.php?action=send_message', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if(data.success) {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar mensaje';
+      alert('Error al enviar. Inténtalo de nuevo.');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar mensaje';
+    alert('Error de conexión. Inténtalo de nuevo.');
+  }
 });
 </script>
 

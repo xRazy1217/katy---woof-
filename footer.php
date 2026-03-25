@@ -3,7 +3,9 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="<?php echo $base; ?>/" class="logo">KATY<span style="color:var(--accent)">&</span>WOOF</a>
+        <a href="<?php echo $base; ?>/" class="logo">
+          <img src="<?php echo $base; ?>/Logo_KW.png" alt="Katy &amp; Woof" style="height:42px;width:auto;object-fit:contain">
+        </a>
         <p>Arte con propósito. Retratos coloridos que celebran el vínculo entre las personas y sus mascotas. Desde La Serena, Chile.</p>
         <div class="social-links" style="margin-top:1.5rem">
           <a href="https://www.instagram.com/katyandwoof/" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
@@ -43,12 +45,10 @@
 <script src="<?php echo $base; ?>/js/app.js"></script>
 <?php if(isset($extraJs)) echo $extraJs; ?>
 <script>
-  // Page loader
   window.addEventListener('load', () => {
     const loader = document.getElementById('pageLoader');
     if(loader) { loader.classList.add('hidden'); setTimeout(()=>loader.remove(), 600); }
   });
-  // Reveal on scroll
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
