@@ -27,7 +27,7 @@ class UsersAPI {
             return ['success' => false, 'error' => 'Este correo ya está registrado'];
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $pdo->prepare("INSERT INTO users (name, email, password, phone) VALUES (?,?,?,?)")
+        $pdo->prepare("INSERT INTO users (name, email, password_hash, phone) VALUES (?,?,?,?)")
             ->execute([$name, $email, $hash, $phone]);
 
         $userId = $pdo->lastInsertId();
@@ -46,7 +46,7 @@ class UsersAPI {
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
-        if (!$user || !password_verify($password, $user['password']))
+        if (!$user || !password_verify($password, $user['password_hash']))
             return ['success' => false, 'error' => 'Correo o contraseña incorrectos'];
 
         return self::startSession($user['id'], $pdo);
@@ -88,7 +88,7 @@ class UsersAPI {
 
         if (!empty($data['password']) && strlen($data['password']) >= 6) {
             $hash = password_hash($data['password'], PASSWORD_DEFAULT);
-            $pdo->prepare("UPDATE users SET password=? WHERE id=?")->execute([$hash, $id]);
+            $pdo->prepare("UPDATE users SET password_hash=? WHERE id=?")->execute([$hash, $id]);
         }
 
         return self::me();
