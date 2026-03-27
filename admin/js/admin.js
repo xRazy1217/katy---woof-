@@ -2,6 +2,25 @@
 // KATY & WOOF — Admin Panel JavaScript
 // ══════════════════════════════════════════════════════════════
 
+// ── ADMIN THEME ──
+const AdminTheme = {
+  init() {
+    if(localStorage.getItem('kw_admin_theme') === 'light') this._apply('light');
+    else this._apply('dark');
+  },
+  toggle() {
+    const isLight = document.body.classList.contains('light-theme');
+    const next = isLight ? 'dark' : 'light';
+    localStorage.setItem('kw_admin_theme', next);
+    this._apply(next);
+  },
+  _apply(theme) {
+    document.body.classList.toggle('light-theme', theme === 'light');
+    const icon = document.getElementById('adminThemeIcon');
+    if(icon) icon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+};
+
 // ── UTILIDADES ──
 const fmt = price => new Intl.NumberFormat('es-CL', {style:'currency', currency:'CLP'}).format(price);
 
@@ -788,6 +807,7 @@ document.getElementById('btnRepairDB').addEventListener('click', async () => {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
+  AdminTheme.init();
   loadDashboard();
   checkUnreadMessages();
 });

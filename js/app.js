@@ -22,6 +22,15 @@ function toggleNav() {
   ham.classList.toggle('open');
 }
 
+function toggleUserMenu() {
+  document.getElementById('userDropdown')?.classList.toggle('open');
+}
+
+async function logoutUser() {
+  await fetch(`${BASE}/api.php?action=user_logout`);
+  window.location.reload();
+}
+
 /* ══════════════════════════════
    TOAST
 ══════════════════════════════ */

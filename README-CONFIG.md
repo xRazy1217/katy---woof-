@@ -17,13 +17,13 @@ DB_NAME=katywoof_ecommerce
 DB_USER=root
 DB_PASS=
 APP_ENV=development
-APP_URL=http://localhost/katy-&-woof/katy-woof
+APP_URL=https://retratodemascotas.cl
 FLOW_SANDBOX=true
 ```
 
 ### 3. Acceder al proyecto
-- Sitio: http://localhost/katy-&-woof/katy-woof/
-- Admin: http://localhost/katy-&-woof/katy-woof/admin/
+- Sitio: https://retratodemascotas.cl/
+- Admin: https://retratodemascotas.cl/admin/
 - Contraseña: Asesor25
 
 ---
@@ -45,7 +45,7 @@ DB_NAME=dblvwvro0bzl5v
 DB_USER=uposiqjihhwsg
 DB_PASS=$^6T5AC1&5lE
 APP_ENV=production
-APP_URL=https://retratodemascotas.cl/katy-&-woof
+APP_URL=https://retratodemascotas.cl
 FLOW_SANDBOX=false
 ```
 

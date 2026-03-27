@@ -2,6 +2,17 @@
 require_once __DIR__ . '/config.php';
 $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 $base = APP_URL;
+// Verificar sesión de usuario
+if (session_status() === PHP_SESSION_NONE) session_start();
+$loggedUser = null;
+if (!empty($_SESSION['kw_user_id'])) {
+    try {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("SELECT id, name, email FROM users WHERE id=?");
+        $stmt->execute([$_SESSION['kw_user_id']]);
+        $loggedUser = $stmt->fetch();
+    } catch(Exception $e) {}
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -72,6 +83,31 @@ $base = APP_URL;
         <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema" onclick="ThemeManager.toggle()">
           <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
+        <?php if ($loggedUser): ?>
+        <div class="user-menu-wrap" id="userMenuWrap">
+          <button class="user-menu-btn" onclick="toggleUserMenu()">
+            <div class="user-avatar"><?php echo strtoupper(substr($loggedUser['name'],0,1)); ?></div>
+            <span class="user-name-short"><?php echo htmlspecialchars(explode(' ',$loggedUser['name'])[0]); ?></span>
+            <i class="fa-solid fa-chevron-down" style="font-size:0.65rem"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <div style="padding:0.8rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06)">
+              <div style="font-size:0.82rem;font-weight:600;color:var(--white)"><?php echo htmlspecialchars($loggedUser['name']); ?></div>
+              <div style="font-size:0.72rem;color:var(--mid)"><?php echo htmlspecialchars($loggedUser['email']); ?></div>
+            </div>
+            <a href="<?php echo $base; ?>/mi-perfil.php" class="user-dropdown-item"><i class="fa-solid fa-receipt"></i> Mis compras</a>
+            <a href="<?php echo $base; ?>/mi-perfil.php" class="user-dropdown-item"><i class="fa-solid fa-user"></i> Mi perfil</a>
+            <a href="<?php echo $base; ?>/contacto.php" class="user-dropdown-item"><i class="fa-solid fa-envelope"></i> Contactar con Katy & Woof</a>
+            <div style="border-top:1px solid rgba(255,255,255,0.06);margin-top:0.3rem;padding-top:0.3rem">
+              <button class="user-dropdown-item" style="width:100%;text-align:left;color:#ef4444" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+            </div>
+          </div>
+        </div>
+        <?php else: ?>
+        <a href="<?php echo $base; ?>/cuenta.php" class="btn btn-ghost btn-sm">
+          <i class="fa-solid fa-user"></i> Entrar
+        </a>
+        <?php endif; ?>
         <button class="cart-btn" onclick="CartManager.open()">
           <i class="fa-solid fa-bag-shopping"></i>
           <span>Carrito</span>

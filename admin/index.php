@@ -134,6 +134,9 @@ $adminKey = ADMIN_KEY;
         <span class="topbar-title" id="topbarTitle">Dashboard</span>
       </div>
       <div class="topbar-right">
+        <button class="btn btn-ghost btn-icon btn-sm" onclick="AdminTheme.toggle()" title="Cambiar tema">
+          <i class="fa-solid fa-moon" id="adminThemeIcon"></i>
+        </button>
         <span class="topbar-env <?php echo $env === 'production' ? 'prod' : ''; ?>">
           <?php echo strtoupper($env); ?>
         </span>

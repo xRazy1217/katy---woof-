@@ -53,6 +53,13 @@
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  // Cerrar menú usuario al hacer click fuera
+  document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('userMenuWrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('userDropdown')?.classList.remove('open');
+    }
+  });
 </script>
 </body>
 </html>

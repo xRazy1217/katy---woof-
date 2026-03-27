@@ -8,7 +8,7 @@
 # Reescritura de URLs
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /katy-woof/
+    RewriteBase /
 
     # Permitir acceso a archivos existentes
     RewriteCond %{REQUEST_FILENAME} !-f

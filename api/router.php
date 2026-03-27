@@ -54,6 +54,7 @@ require_once __DIR__ . '/schema-auditor.php';
 require_once __DIR__ . '/cart-api.php';
 require_once __DIR__ . '/checkout-api.php';
 require_once __DIR__ . '/messages-api.php';
+require_once __DIR__ . '/users-api.php';
 if (file_exists(__DIR__ . '/ecommerce-api.php')) {
     require_once __DIR__ . '/ecommerce-api.php';
 }
@@ -393,6 +394,141 @@ try {
         // ── CLIENTES ──
         case 'get_customers':
             echo json_encode(CustomersAPI::getAll());
+            break;
+
+        // ── CATEGORIAS CRUD ──
+        case 'create_category':
+        case 'update_category': {
+            $body = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            $pdo  = Database::getConnection();
+            $name = trim($body['name'] ?? '');
+            if (!$name) { echo json_encode(['success'=>false,'error'=>'Nombre requerido']); break; }
+            $slug = trim($body['slug'] ?? '') ?: strtolower(preg_replace('/[^a-z0-9]+/i','-',$name));
+            $desc = trim($body['description'] ?? '');
+            $id   = intval($body['id'] ?? 0);
+            if ($id) {
+                $pdo->prepare("UPDATE product_categories SET name=?,slug=?,description=? WHERE id=?")->execute([$name,$slug,$desc,$id]);
+            } else {
+                $pdo->prepare("INSERT INTO product_categories (name,slug,description) VALUES (?,?,?)")->execute([$name,$slug,$desc]);
+            }
+            echo json_encode(['success'=>true]);
+            break;
+        }
+        case 'delete_category': {
+            $id = intval($_GET['id'] ?? $_POST['id'] ?? 0);
+            Database::getConnection()->prepare("DELETE FROM product_categories WHERE id=?")->execute([$id]);
+            echo json_encode(['success'=>true]);
+            break;
+        }
+
+        // ── PRODUCTOS CRUD ──
+        case 'create_product':
+        case 'update_product': {
+            $pdo  = Database::getConnection();
+            $id   = intval($_POST['id'] ?? 0);
+            $name = trim($_POST['name'] ?? '');
+            if (!$name) { echo json_encode(['success'=>false,'error'=>'Nombre requerido']); break; }
+            $slug  = strtolower(preg_replace('/[^a-z0-9]+/i','-',$name)) . '-' . time();
+            $price = floatval($_POST['price'] ?? 0);
+            $sale  = floatval($_POST['sale_price'] ?? 0);
+            $stock = intval($_POST['stock_quantity'] ?? 0);
+            $cat   = intval($_POST['category_id'] ?? 0) ?: null;
+            $sku   = trim($_POST['sku'] ?? '');
+            $desc  = trim($_POST['description'] ?? '');
+            $status = $_POST['status'] ?? 'publish';
+            $imgUrl = trim($_POST['image_url'] ?? '');
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $res = ImageHandler::optimizeAndSaveImage($_FILES['image'], 'products');
+                if ($res['success']) $imgUrl = '/' . ltrim($res['path'], '/');
+            }
+            if ($id) {
+                $pdo->prepare("UPDATE products SET name=?,slug=?,description=?,sku=?,price=?,sale_price=?,stock_quantity=?,category_id=?,status=?" . ($imgUrl ? ",image_url=?" : "") . " WHERE id=?")
+                    ->execute($imgUrl ? [$name,$slug,$desc,$sku,$price,$sale,$stock,$cat,$status,$imgUrl,$id] : [$name,$slug,$desc,$sku,$price,$sale,$stock,$cat,$status,$id]);
+            } else {
+                $pdo->prepare("INSERT INTO products (name,slug,description,sku,price,sale_price,stock_quantity,category_id,status,image_url) VALUES (?,?,?,?,?,?,?,?,?,?)")
+                    ->execute([$name,$slug,$desc,$sku,$price,$sale,$stock,$cat,$status,$imgUrl]);
+            }
+            echo json_encode(['success'=>true]);
+            break;
+        }
+        case 'delete_product': {
+            $id = intval($_POST['id'] ?? $_GET['id'] ?? 0);
+            Database::getConnection()->prepare("DELETE FROM products WHERE id=?")->execute([$id]);
+            echo json_encode(['success'=>true]);
+            break;
+        }
+
+        // ── ORDENES CRUD ──
+        case 'update_order_status': {
+            $body   = json_decode(file_get_contents('php://input'), true) ?? [];
+            $id     = intval($body['id'] ?? 0);
+            $status = $body['status'] ?? '';
+            Database::getConnection()->prepare("UPDATE orders SET status=? WHERE id=?")->execute([$status,$id]);
+            echo json_encode(['success'=>true]);
+            break;
+        }
+
+        // ── CUPONES CRUD ──
+        case 'create_coupon':
+        case 'update_coupon': {
+            $body   = json_decode(file_get_contents('php://input'), true) ?? [];
+            $pdo    = Database::getConnection();
+            $id     = intval($body['id'] ?? 0);
+            $code   = strtoupper(trim($body['code'] ?? ''));
+            if (!$code) { echo json_encode(['success'=>false,'error'=>'Código requerido']); break; }
+            $type   = $body['discount_type'] ?? 'percentage';
+            $value  = floatval($body['discount_value'] ?? 0);
+            $min    = floatval($body['minimum_amount'] ?? 0);
+            $limit  = intval($body['usage_limit'] ?? 0);
+            $expiry = $body['expiry_date'] ?: null;
+            $desc   = trim($body['description'] ?? '');
+            $status = $body['status'] ?? 'active';
+            if ($id) {
+                $pdo->prepare("UPDATE coupons SET code=?,discount_type=?,discount_value=?,minimum_amount=?,usage_limit=?,expiry_date=?,description=?,status=? WHERE id=?")
+                    ->execute([$code,$type,$value,$min,$limit,$expiry,$desc,$status,$id]);
+            } else {
+                $pdo->prepare("INSERT INTO coupons (code,discount_type,discount_value,minimum_amount,usage_limit,expiry_date,description,status) VALUES (?,?,?,?,?,?,?,?)")
+                    ->execute([$code,$type,$value,$min,$limit,$expiry,$desc,$status]);
+            }
+            echo json_encode(['success'=>true]);
+            break;
+        }
+        case 'delete_coupon': {
+            $id = intval($_POST['id'] ?? $_GET['id'] ?? 0);
+            Database::getConnection()->prepare("DELETE FROM coupons WHERE id=?")->execute([$id]);
+            echo json_encode(['success'=>true]);
+            break;
+        }
+        case 'toggle_coupon': {
+            $body   = json_decode(file_get_contents('php://input'), true) ?? [];
+            $id     = intval($body['id'] ?? 0);
+            $status = $body['status'] ?? 'active';
+            Database::getConnection()->prepare("UPDATE coupons SET status=? WHERE id=?")->execute([$status,$id]);
+            echo json_encode(['success'=>true]);
+            break;
+        }
+
+        // ── USUARIOS ──
+        case 'user_register':
+            $body = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            echo json_encode(UsersAPI::register($body));
+            break;
+        case 'user_login':
+            $body = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            echo json_encode(UsersAPI::login($body));
+            break;
+        case 'user_logout':
+            echo json_encode(UsersAPI::logout());
+            break;
+        case 'user_me':
+            echo json_encode(UsersAPI::me());
+            break;
+        case 'user_update':
+            $body = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            echo json_encode(UsersAPI::updateProfile($body));
+            break;
+        case 'user_orders':
+            echo json_encode(UsersAPI::getOrders());
             break;
 
         // ── CARRITO ──
