@@ -54,7 +54,7 @@ class UsersAPI {
 
     public static function logout(): array {
         if (session_status() === PHP_SESSION_NONE) session_start();
-        session_destroy();
+        unset($_SESSION['kw_user_id']);
         return ['success' => true];
     }
 

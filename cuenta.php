@@ -1,8 +1,7 @@
 <?php
 require_once 'config.php';
 $base = APP_URL;
-// Si ya está logueado, redirigir al perfil
-session_start();
+if (session_status() === PHP_SESSION_NONE) session_start();
 if (!empty($_SESSION['kw_user_id'])) {
     header("Location: $base/mi-perfil.php");
     exit;
