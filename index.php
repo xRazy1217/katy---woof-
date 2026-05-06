@@ -180,7 +180,7 @@ include 'header.php';
       <?php foreach($featured as $i => $p): ?>
       <div class="card product-card reveal" style="transition-delay:<?php echo $i*0.1; ?>s" onclick="window.location='<?php echo $base; ?>/producto.php?id=<?php echo $p['id']; ?>'">
         <div class="product-card-img">
-          <img src="<?php echo $p['image_url'] ?: $base.'/uploads/placeholder-product.svg'; ?>" alt="<?php echo htmlspecialchars($p['name']); ?>"/>
+          <img src="<?php echo $p['image_url'] ?: $base.'/uploads/placeholder-product.svg'; ?>" alt="<?php echo htmlspecialchars($p['name']); ?>" loading="lazy"/>
           <?php if($p['sale_price']): ?>
           <div style="position:absolute;top:0.8rem;left:0.8rem"><span class="badge badge-accent">Oferta</span></div>
           <?php endif; ?>

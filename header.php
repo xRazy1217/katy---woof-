@@ -70,7 +70,7 @@ if (!empty($_SESSION['kw_user_id'])) {
   <div class="container">
     <div class="header-inner">
       <a href="<?php echo $base; ?>/" class="logo">
-        <img src="<?php echo getSetting('site_logo', $base.'/Logo_KW.png'); ?>" alt="Katy &amp; Woof" style="height:38px;width:auto;object-fit:contain">
+        <img src="<?php echo getSetting('site_logo', $base.'/Logo_KW.png'); ?>" alt="Katy &amp; Woof" style="height:38px;width:auto;object-fit:contain" fetchpriority="high">
       </a>
       <nav class="nav" id="mainNav">
         <a href="<?php echo $base; ?>/"            class="<?php echo $currentPage==='index'   ?'active':''; ?>">Inicio</a>
