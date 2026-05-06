@@ -266,8 +266,8 @@
             <img id="prev_site_favicon" class="img-preview" src="" style="display:none">
             <i class="fa fa-star" id="icon_site_favicon"></i>
             <p>Ícono de pestaña (SVG/PNG)</p>
-            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_favicon')"><i class="fa fa-save"></i> Guardar Favicon</button>
           </div>
+          <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_favicon')"><i class="fa fa-save"></i> Guardar Favicon</button>
         </div>
         <div class="form-group">
           <label>Logo del sitio</label>
@@ -276,8 +276,8 @@
             <img id="prev_site_logo" class="img-preview" src="" style="display:none">
             <i class="fa fa-cloud-arrow-up" id="icon_site_logo"></i>
             <p>Logo principal</p>
-            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_logo')"><i class="fa fa-save"></i> Guardar Logo</button>
           </div>
+          <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_logo')"><i class="fa fa-save"></i> Guardar Logo</button>
         </div>
         <div class="form-group">
           <label>Imagen Hero</label>
@@ -286,8 +286,8 @@
             <img id="prev_hero_image" class="img-preview" src="" style="display:none">
             <i class="fa fa-image" id="icon_hero_image"></i>
             <p>Fondo banner principal</p>
-            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('hero_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
           </div>
+          <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('hero_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
         </div>
         <div class="form-group">
           <label>Imagen "Nosotros"</label>
@@ -296,36 +296,13 @@
             <img id="prev_nosotros_image" class="img-preview" src="" style="display:none">
             <i class="fa fa-users" id="icon_nosotros_image"></i>
             <p>Imagen sección historia</p>
-            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('nosotros_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
           </div>
+          <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('nosotros_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
         </div>
-        <div class="form-group">
-          <label>Favicon</label>
-          <div class="img-upload-area">
-            <input type="file" name="site_favicon" accept="image/*" onchange="previewSettingImg(this,'prev_site_favicon')">
-            <img id="prev_site_favicon" class="img-preview" src="" style="display:none">
-            <i class="fa fa-cloud-arrow-up" id="icon_site_favicon"></i>
-            <p>Icono del navegador</p>
-          </div>
-        </div>
-      </div>
-      <div class="settings-card">
-        <h3><i class="fa fa-image"></i> Hero</h3>
-        <div class="form-group"><label>Título del Hero</label><input type="text" name="hero_title" class="input"></div>
-        <div class="form-group"><label>Descripción del Hero</label><textarea name="hero_description" class="textarea"></textarea></div>
-      </div>
-      <div class="settings-card">
-        <h3><i class="fa fa-pen-nib"></i> Nosotros</h3>
-        <div class="form-group"><label>Título Nosotros</label><input type="text" name="nosotros_title" class="input"></div>
-        <div class="form-group"><label>Historia</label><textarea name="our_history" class="textarea" style="min-height:120px"></textarea></div>
-      </div>
-      <div class="settings-card">
-        <h3><i class="fa fa-quote-left"></i> Footer</h3>
-        <div class="form-group"><label>Filosofía del footer</label><textarea name="footer_philosophy" class="textarea"></textarea></div>
       </div>
     </div>
     <div style="margin-top:1.5rem;display:flex;justify-content:flex-end">
-      <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> Guardar ajustes</button>
+      <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> Guardar todos los ajustes</button>
     </div>
   </form>
 </div>
