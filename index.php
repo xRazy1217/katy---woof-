@@ -29,10 +29,10 @@ include 'header.php';
           <span class="label">Arte · Mascotas · Chile</span>
         </div>
         <h1 class="reveal delay-1">
-          Tu mascota,<br><em>eternizada</em><br>en arte.
+          <?php echo getSetting('hero_title', 'Tu mascota,<br><em>eternizada</em><br>en arte.'); ?>
         </h1>
         <p class="hero-desc reveal delay-2">
-          Retratos artísticos coloridos que capturan la esencia, la mirada y la alegría de tu compañero más fiel. Hechos con amor desde La Serena.
+          <?php echo getSetting('hero_description', 'Retratos artísticos coloridos que capturan la esencia, la mirada y la alegría de tu compañero más fiel. Hechos con amor desde La Serena.'); ?>
         </p>
         <div class="hero-actions reveal delay-3">
           <a href="<?php echo $base; ?>/catalogo.php" class="btn btn-primary btn-lg">
@@ -59,7 +59,7 @@ include 'header.php';
       </div>
       <div class="hero-image-wrap reveal delay-2">
         <div class="hero-image-frame animate-float">
-          <img src="<?php echo $base; ?>/img/placeholder.svg" alt="Retrato artístico de mascota" id="heroImg"/>
+          <img src="<?php echo getSetting('hero_image', $base.'/img/placeholder.svg'); ?>" alt="Retrato artístico de mascota" id="heroImg"/>
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2">
             <div style="text-align:center;color:rgba(255,255,255,0.2)">
               <i class="fa-solid fa-paw" style="font-size:4rem"></i>
@@ -83,16 +83,16 @@ include 'header.php';
     <div class="grid-2" style="gap:5rem">
       <div>
         <div class="reveal">
-          <span class="label">Nuestra historia</span>
+          <span class="label"><?php echo getSetting('nosotros_label', 'Nuestra historia'); ?></span>
           <h2 style="margin-top:1rem;margin-bottom:1.5rem">
-            Nace desde el<br><span class="accent">amor y la resiliencia</span>
+            <?php echo getSetting('nosotros_title', 'Nace desde el<br><span class="accent">amor y la resiliencia</span>'); ?>
           </h2>
         </div>
         <p class="reveal delay-1" style="margin-bottom:1.2rem;line-height:1.9">
-          KATY & WOOF nace desde una historia de amor, resiliencia y conexión con los animales. Durante una etapa muy difícil de mi vida enfrenté dos cánceres. En ese proceso, mis mascotas estuvieron siempre a mi lado, acompañándome con su cariño incondicional.
+          <?php echo getSetting('our_history_p1', 'KATY & WOOF nace desde una historia de amor, resiliencia y conexión con los animales. Durante una etapa muy difícil de mi vida enfrenté dos cánceres. En ese proceso, mis mascotas estuvieron siempre a mi lado, acompañándome con su cariño incondicional.'); ?>
         </p>
         <p class="reveal delay-2" style="margin-bottom:2rem;line-height:1.9">
-          A partir de esa experiencia nació la necesidad de agradecer y honrar el amor de los animales a través del arte. Así comencé a pintar retratos coloridos de mascotas, capturando su esencia y la alegría que entregan a nuestras vidas.
+          <?php echo getSetting('our_history_p2', 'A partir de esa experiencia nació la necesidad de agradecer y honrar el amor de los animales a través del arte. Así comencé a pintar retratos coloridos de mascotas, capturando su esencia y la alegría que entregan a nuestras vidas.'); ?>
         </p>
         <div class="reveal delay-3" style="display:flex;gap:1rem;flex-wrap:wrap">
           <div class="glass" style="padding:1.2rem 1.8rem;text-align:center">

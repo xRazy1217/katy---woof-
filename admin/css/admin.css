@@ -343,3 +343,23 @@ body.light-theme .toast { background:#FFFFFF; border-color:rgba(0,0,0,0.1); colo
   .form-row, .form-row-3 { grid-template-columns: 1fr; }
   .data-table th:nth-child(n+5), .data-table td:nth-child(n+5) { display: none; }
 }
+
+/* ── SETTINGS ACTIONS ── */
+.input-with-action {
+  display: flex;
+  gap: 0.5rem;
+}
+.input-with-action .input {
+  flex: 1;
+}
+.input-with-action .btn-icon {
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+}
+
+.img-save-btn {
+  margin-top: 1rem;
+  width: 100%;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}

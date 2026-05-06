@@ -113,18 +113,36 @@ function getDBConnectionOrThrow() {
     }
 }
 
+// ── Helper para obtener configuraciones dinámicas ──
+$site_settings_cache = null;
+
+function getSetting($key, $default = '') {
+    global $site_settings_cache;
+    if ($site_settings_cache === null) {
+        $site_settings_cache = getSiteSettings();
+    }
+    return $site_settings_cache[$key] ?? $default;
+}
+
 // Helper para obtener todos los settings de una vez
 function getSiteSettings() {
     try {
         $pdo = getDBConnection();
-        $stmt = $pdo->query("SELECT setting_key, setting_value FROM site_settings");
+        // Intentar usar ecommerce_settings (v6.0+) o site_settings (legacy)
+        $table = 'ecommerce_settings';
+        try {
+            $stmt = $pdo->query("SELECT setting_key, setting_value FROM ecommerce_settings");
+        } catch (Exception $e) {
+            $table = 'site_settings';
+            $stmt = $pdo->query("SELECT setting_key, setting_value FROM site_settings");
+        }
+        
         $settings = [];
         while ($row = $stmt->fetch()) {
             $settings[$row['setting_key']] = $row['setting_value'];
         }
         return $settings;
     } catch (Exception $e) {
-        // Retornar array vacío si la tabla no existe o hay error
         return [];
     }
 }

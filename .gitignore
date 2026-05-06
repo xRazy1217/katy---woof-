@@ -39,3 +39,12 @@ database-export.sql
 # Logs
 logs/*
 !logs/.gitkeep
+
+# Environment backups
+.env.production
+
+# Deployment artifacts
+*.zip
+scratch/
+massive-tester.php
+api-stress-test.php

@@ -4,13 +4,13 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="<?php echo $base; ?>/" class="logo">
-          <img src="<?php echo $base; ?>/Logo_KW.png" alt="Katy &amp; Woof" style="height:42px;width:auto;object-fit:contain">
+          <img src="<?php echo getSetting('site_logo', $base.'/Logo_KW.png'); ?>" alt="Katy &amp; Woof" style="height:42px;width:auto;object-fit:contain">
         </a>
-        <p>Arte con propósito. Retratos coloridos que celebran el vínculo entre las personas y sus mascotas. Desde La Serena, Chile.</p>
+        <p><?php echo getSetting('footer_philosophy', 'Arte con propósito. Retratos coloridos que celebran el vínculo entre las personas y sus mascotas. Desde La Serena, Chile.'); ?></p>
         <div class="social-links" style="margin-top:1.5rem">
-          <a href="https://www.instagram.com/katyandwoof/" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://wa.me/56976886481" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
-          <a href="mailto:katy.woof.store@gmail.com" class="social-link"><i class="fa-solid fa-envelope"></i></a>
+          <a href="<?php echo getSetting('social_instagram', 'https://www.instagram.com/katyandwoof/'); ?>" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+          <a href="<?php echo getSetting('contact_whatsapp_url', 'https://wa.me/56976886481'); ?>" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="mailto:<?php echo getSetting('contact_email', 'katy.woof.store@gmail.com'); ?>" class="social-link"><i class="fa-solid fa-envelope"></i></a>
         </div>
       </div>
       <div class="footer-col">
@@ -29,10 +29,10 @@
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
-        <a href="mailto:katy.woof.store@gmail.com">katy.woof.store@gmail.com</a>
-        <a href="https://wa.me/56976886481">+56 9 7688 6481</a>
-        <a href="#">La Serena, Chile</a>
-        <a href="#">Lun–Sáb 09:00–18:00</a>
+        <a href="mailto:<?php echo getSetting('contact_email', 'katy.woof.store@gmail.com'); ?>"><?php echo getSetting('contact_email', 'katy.woof.store@gmail.com'); ?></a>
+        <a href="<?php echo getSetting('contact_whatsapp_url', 'https://wa.me/56976886481'); ?>"><?php echo getSetting('contact_whatsapp', '+56 9 7688 6481'); ?></a>
+        <a href="#"><?php echo getSetting('contact_address', 'La Serena, Chile'); ?></a>
+        <a href="#"><?php echo getSetting('contact_hours', 'Lun–Sáb 09:00–18:00'); ?></a>
       </div>
     </div>
     <div class="footer-bottom">

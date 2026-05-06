@@ -21,7 +21,7 @@ if (!empty($_SESSION['kw_user_id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title><?php echo isset($pageTitle) ? $pageTitle . ' — Katy & Woof' : 'Katy & Woof | Retratos Artísticos de Mascotas'; ?></title>
   <meta name="description" content="<?php echo isset($pageDesc) ? $pageDesc : 'Retratos artísticos coloridos de mascotas. Arte con propósito desde La Serena, Chile.'; ?>"/>
-  <link rel="icon" type="image/svg+xml" href="<?php echo $base; ?>/img/favicon.svg"/>
+  <link rel="icon" type="image/svg+xml" href="<?php echo getSetting('site_favicon', $base.'/img/favicon.svg'); ?>"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -70,7 +70,7 @@ if (!empty($_SESSION['kw_user_id'])) {
   <div class="container">
     <div class="header-inner">
       <a href="<?php echo $base; ?>/" class="logo">
-        <img src="<?php echo $base; ?>/Logo_KW.png" alt="Katy &amp; Woof" style="height:38px;width:auto;object-fit:contain">
+        <img src="<?php echo getSetting('site_logo', $base.'/Logo_KW.png'); ?>" alt="Katy &amp; Woof" style="height:38px;width:auto;object-fit:contain">
       </a>
       <nav class="nav" id="mainNav">
         <a href="<?php echo $base; ?>/"            class="<?php echo $currentPage==='index'   ?'active':''; ?>">Inicio</a>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Katy & Woof - E-commerce API Module v1.0
  * Integración de categorías, productos, órdenes y cupones
@@ -291,6 +291,172 @@ class EcommerceAPI {
                 'error' => 'Error al obtener cupones: ' . $e->getMessage(),
                 'data' => []
             ];
+        }
+    }
+
+    /**
+     * Eliminar un producto
+     */
+    public static function deleteProduct($id) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
+            $stmt->execute([intval($id)]);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Actualizar estado de una orden
+     */
+    public static function updateOrderStatus($id, $status) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+            $stmt->execute([$status, intval($id)]);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Guardar o actualizar un cupón
+     */
+    public static function saveCoupon($body) {
+        try {
+            $pdo = getDBConnection();
+            $id = intval($body['id'] ?? 0);
+            $code = strtoupper(trim($body['code'] ?? ''));
+            if (!$code) return ['success' => false, 'error' => 'Código requerido'];
+
+            $type = $body['discount_type'] ?? 'percentage';
+            $value = floatval($body['discount_value'] ?? 0);
+            $min = floatval($body['minimum_amount'] ?? 0);
+            $limit = intval($body['usage_limit'] ?? 0);
+            $expiry = !empty($body['expiry_date']) ? $body['expiry_date'] : null;
+            $desc = trim($body['description'] ?? '');
+            $status = $body['status'] ?? 'active';
+
+            if ($id) {
+                $stmt = $pdo->prepare("UPDATE coupons SET code=?, discount_type=?, discount_value=?, minimum_amount=?, usage_limit=?, expiry_date=?, description=?, status=? WHERE id=?");
+                $stmt->execute([$code, $type, $value, $min, $limit, $expiry, $desc, $status, $id]);
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO coupons (code, discount_type, discount_value, minimum_amount, usage_limit, expiry_date, description, status) VALUES (?,?,?,?,?,?,?,?)");
+                $stmt->execute([$code, $type, $value, $min, $limit, $expiry, $desc, $status]);
+            }
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Eliminar un cupón
+     */
+    public static function deleteCoupon($id) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("DELETE FROM coupons WHERE id = ?");
+            $stmt->execute([intval($id)]);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Alternar estado de un cupón
+     */
+    public static function toggleCoupon($id, $status) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("UPDATE coupons SET status = ? WHERE id = ?");
+            $stmt->execute([$status, intval($id)]);
+            return ['success' => true];
+        } catch (Exception $e) {
+        }
+    }
+
+    /**
+     * Guardar o actualizar un producto (con imagen)
+     */
+    public static function saveProduct($data, $files) {
+        try {
+            $pdo = getDBConnection();
+            $id = intval($data['id'] ?? 0);
+            $name = trim($data['name'] ?? '');
+            $slug = !empty($data['slug']) ? $data['slug'] : strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+            $sku = $data['sku'] ?? '';
+            $desc = $data['description'] ?? '';
+            $price = floatval($data['price'] ?? 0);
+            $sale_price = floatval($data['sale_price'] ?? 0);
+            $stock = intval($data['stock_quantity'] ?? 0);
+            $cat_id = intval($data['category_id'] ?? 0);
+            $status = $data['status'] ?? 'publish';
+
+            $imageUrl = $data['image_url'] ?? '';
+
+            if (!empty($files['image']) && $files['image']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = __DIR__ . '/../uploads/products/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+                $ext = pathinfo($files['image']['name'], PATHINFO_EXTENSION);
+                $filename = 'prod_' . time() . '.' . $ext;
+                if (move_uploaded_file($files['image']['tmp_name'], $uploadDir . $filename)) {
+                    $imageUrl = '/uploads/products/' . $filename;
+                }
+            }
+
+            if ($id) {
+                $stmt = $pdo->prepare("UPDATE products SET name=?, slug=?, sku=?, description=?, price=?, sale_price=?, stock_quantity=?, category_id=?, status=?, image_url=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $desc, $price, $sale_price, $stock, $cat_id, $status, $imageUrl, $id]);
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO products (name, slug, sku, description, price, sale_price, stock_quantity, category_id, status, image_url) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $desc, $price, $sale_price, $stock, $cat_id, $status, $imageUrl]);
+            }
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Guardar o actualizar una categoría
+     */
+    public static function saveCategory($data) {
+        try {
+            $pdo = getDBConnection();
+            $id = intval($data['id'] ?? 0);
+            $name = trim($data['name'] ?? '');
+            $slug = !empty($data['slug']) ? $data['slug'] : strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+            $desc = $data['description'] ?? '';
+
+            if ($id) {
+                $stmt = $pdo->prepare("UPDATE product_categories SET name=?, slug=?, description=? WHERE id=?");
+                $stmt->execute([$name, $slug, $desc, $id]);
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO product_categories (name, slug, description) VALUES (?,?,?)");
+                $stmt->execute([$name, $slug, $desc]);
+            }
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Eliminar una categoría
+     */
+    public static function deleteCategory($id) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("DELETE FROM product_categories WHERE id = ?");
+            $stmt->execute([intval($id)]);
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
         }
     }
 }

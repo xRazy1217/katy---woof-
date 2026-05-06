@@ -137,14 +137,138 @@
   <form id="settingsForm">
     <div class="settings-grid">
       <div class="settings-card">
+        <h3><i class="fa fa-star"></i> Banner Principal (Hero)</h3>
+        <div class="form-group">
+          <label>Título Hero</label>
+          <div class="input-with-action">
+            <input type="text" name="hero_title" class="input" placeholder="Tu mascota, eternizada...">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('hero_title')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción Hero</label>
+          <div class="input-with-action">
+            <textarea name="hero_description" class="textarea" placeholder="Retratos artísticos coloridos..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('hero_description')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-card">
         <h3><i class="fa fa-globe"></i> General</h3>
-        <div class="form-group"><label>Email de contacto</label><input type="email" name="contact_email" class="input" placeholder="email@ejemplo.com"></div>
-        <div class="form-group"><label>WhatsApp</label><input type="text" name="contact_whatsapp" class="input" placeholder="+56 9 XXXX XXXX"></div>
-        <div class="form-group"><label>Dirección</label><input type="text" name="contact_address" class="input" placeholder="Ciudad, País"></div>
-        <div class="form-group"><label>Instagram URL</label><input type="text" name="social_instagram" class="input" placeholder="https://instagram.com/..."></div>
+        <div class="form-group">
+          <label>Email de contacto</label>
+          <div class="input-with-action">
+            <input type="email" name="contact_email" class="input" placeholder="email@ejemplo.com">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('contact_email')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <div class="input-with-action">
+            <input type="text" name="contact_whatsapp" class="input" placeholder="+56 9 XXXX XXXX">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('contact_whatsapp')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Dirección</label>
+          <div class="input-with-action">
+            <input type="text" name="contact_address" class="input" placeholder="Ciudad, País">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('contact_address')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Instagram URL</label>
+          <div class="input-with-action">
+            <input type="text" name="social_instagram" class="input" placeholder="https://instagram.com/...">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('social_instagram')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Filosofía Footer</label>
+          <div class="input-with-action">
+            <textarea name="footer_philosophy" class="textarea" placeholder="Arte con propósito..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('footer_philosophy')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Horario de atención</label>
+          <div class="input-with-action">
+            <input type="text" name="contact_hours" class="input" placeholder="Lun–Sáb 09:00–18:00">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('contact_hours')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-card">
+        <h3><i class="fa fa-info-circle"></i> Sección Nosotros</h3>
+        <div class="form-group">
+          <label>Etiqueta Superior</label>
+          <div class="input-with-action">
+            <input type="text" name="nosotros_label" class="input" placeholder="Nuestra historia">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_label')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Título Principal</label>
+          <div class="input-with-action">
+            <input type="text" name="nosotros_title" class="input" placeholder="Arte que nace...">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_title')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción Hero</label>
+          <div class="input-with-action">
+            <textarea name="nosotros_hero_desc" class="textarea" placeholder="Katy & Woof es más que..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_hero_desc')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Historia Párrafo 1</label>
+          <div class="input-with-action">
+            <textarea name="our_history_detailed_p1" class="textarea" placeholder="KATY & WOOF nace..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('our_history_detailed_p1')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre Fundadora</label>
+          <div class="input-with-action">
+            <input type="text" name="nosotros_founder_name" class="input" placeholder="Katherine Rojas Labrín">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_founder_name')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Detalles Fundadora</label>
+          <div class="input-with-action">
+            <input type="text" name="nosotros_founder_details" class="input" placeholder="Artista · La Serena, Chile">
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_founder_details')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Misión</label>
+          <div class="input-with-action">
+            <textarea name="nosotros_mision" class="textarea" placeholder="Crear arte..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_mision')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Visión</label>
+          <div class="input-with-action">
+            <textarea name="nosotros_vision" class="textarea" placeholder="Ser una marca..."></textarea>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_vision')" title="Guardar"><i class="fa fa-save"></i></button>
+          </div>
+        </div>
       </div>
       <div class="settings-card">
         <h3><i class="fa fa-image"></i> Imágenes del sitio</h3>
+        <div class="form-group">
+          <label>Favicon</label>
+          <div class="img-upload-area">
+            <input type="file" name="site_favicon" accept="image/x-icon,image/png,image/svg+xml" onchange="previewSettingImg(this,'prev_site_favicon')">
+            <img id="prev_site_favicon" class="img-preview" src="" style="display:none">
+            <i class="fa fa-star" id="icon_site_favicon"></i>
+            <p>Ícono de pestaña (SVG/PNG)</p>
+            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_favicon')"><i class="fa fa-save"></i> Guardar Favicon</button>
+          </div>
+        </div>
         <div class="form-group">
           <label>Logo del sitio</label>
           <div class="img-upload-area">
@@ -152,6 +276,7 @@
             <img id="prev_site_logo" class="img-preview" src="" style="display:none">
             <i class="fa fa-cloud-arrow-up" id="icon_site_logo"></i>
             <p>Logo principal</p>
+            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('site_logo')"><i class="fa fa-save"></i> Guardar Logo</button>
           </div>
         </div>
         <div class="form-group">
@@ -159,17 +284,19 @@
           <div class="img-upload-area">
             <input type="file" name="hero_image" accept="image/*" onchange="previewSettingImg(this,'prev_hero_image')">
             <img id="prev_hero_image" class="img-preview" src="" style="display:none">
-            <i class="fa fa-cloud-arrow-up" id="icon_hero_image"></i>
-            <p>Imagen principal del hero</p>
+            <i class="fa fa-image" id="icon_hero_image"></i>
+            <p>Fondo banner principal</p>
+            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('hero_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
           </div>
         </div>
         <div class="form-group">
-          <label>Imagen Nosotros</label>
+          <label>Imagen "Nosotros"</label>
           <div class="img-upload-area">
             <input type="file" name="nosotros_image" accept="image/*" onchange="previewSettingImg(this,'prev_nosotros_image')">
             <img id="prev_nosotros_image" class="img-preview" src="" style="display:none">
-            <i class="fa fa-cloud-arrow-up" id="icon_nosotros_image"></i>
-            <p>Sección Nosotros</p>
+            <i class="fa fa-users" id="icon_nosotros_image"></i>
+            <p>Imagen sección historia</p>
+            <button type="button" class="btn btn-primary btn-sm img-save-btn" onclick="saveIndividualSetting('nosotros_image')"><i class="fa fa-save"></i> Guardar Imagen</button>
           </div>
         </div>
         <div class="form-group">
