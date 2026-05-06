@@ -363,3 +363,37 @@ body.light-theme .toast { background:#FFFFFF; border-color:rgba(0,0,0,0.1); colo
   justify-content: center;
   border-radius: var(--radius-sm);
 }
+
+/* ── QUILL EDITOR ── */
+.ql-toolbar.ql-snow {
+  border-color: var(--border) !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--dark2);
+}
+.ql-container.ql-snow {
+  border-color: var(--border) !important;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  background: var(--dark1);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  color: var(--light);
+}
+.ql-editor {
+  min-height: 80px;
+}
+.ql-snow .ql-stroke {
+  stroke: var(--light) !important;
+}
+.ql-snow .ql-fill {
+  fill: var(--light) !important;
+}
+.ql-snow .ql-picker {
+  color: var(--light) !important;
+}
+.ql-snow.ql-toolbar button:hover .ql-stroke, 
+.ql-snow.ql-toolbar button.ql-active .ql-stroke {
+  stroke: var(--accent) !important;
+}
+.rich-editor {
+  width: 100%;
+}

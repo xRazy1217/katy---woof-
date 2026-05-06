@@ -141,15 +141,15 @@
         <div class="form-group">
           <label>Título Hero</label>
           <div class="input-with-action">
-            <input type="text" name="hero_title" class="input" placeholder="Tu mascota, eternizada...">
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('hero_title')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_hero_title" class="rich-editor" data-key="hero_title"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('hero_title')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
         <div class="form-group">
           <label>Descripción Hero</label>
           <div class="input-with-action">
-            <textarea name="hero_description" class="textarea" placeholder="Retratos artísticos coloridos..."></textarea>
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('hero_description')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_hero_description" class="rich-editor" data-key="hero_description"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('hero_description')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
       </div>
@@ -186,8 +186,8 @@
         <div class="form-group">
           <label>Filosofía Footer</label>
           <div class="input-with-action">
-            <textarea name="footer_philosophy" class="textarea" placeholder="Arte con propósito..."></textarea>
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('footer_philosophy')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_footer_philosophy" class="rich-editor" data-key="footer_philosophy"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('footer_philosophy')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
         <div class="form-group">
@@ -210,8 +210,8 @@
         <div class="form-group">
           <label>Título Principal</label>
           <div class="input-with-action">
-            <input type="text" name="nosotros_title" class="input" placeholder="Arte que nace...">
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_title')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_nosotros_title" class="rich-editor" data-key="nosotros_title"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('nosotros_title')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
         <div class="form-group">
@@ -224,8 +224,8 @@
         <div class="form-group">
           <label>Historia Párrafo 1</label>
           <div class="input-with-action">
-            <textarea name="our_history_detailed_p1" class="textarea" placeholder="KATY & WOOF nace..."></textarea>
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('our_history_detailed_p1')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_our_history_detailed_p1" class="rich-editor" data-key="our_history_detailed_p1"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('our_history_detailed_p1')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
         <div class="form-group">
@@ -245,15 +245,15 @@
         <div class="form-group">
           <label>Misión</label>
           <div class="input-with-action">
-            <textarea name="nosotros_mision" class="textarea" placeholder="Crear arte..."></textarea>
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_mision')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_nosotros_mision" class="rich-editor" data-key="nosotros_mision"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('nosotros_mision')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
         <div class="form-group">
           <label>Visión</label>
           <div class="input-with-action">
-            <textarea name="nosotros_vision" class="textarea" placeholder="Ser una marca..."></textarea>
-            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveIndividualSetting('nosotros_vision')" title="Guardar"><i class="fa fa-save"></i></button>
+            <div id="editor_nosotros_vision" class="rich-editor" data-key="nosotros_vision"></div>
+            <button type="button" class="btn btn-primary btn-icon btn-sm" onclick="saveRichSetting('nosotros_vision')" title="Guardar"><i class="fa fa-save"></i></button>
           </div>
         </div>
       </div>

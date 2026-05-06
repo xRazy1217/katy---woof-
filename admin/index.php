@@ -32,6 +32,8 @@ $adminKey = ADMIN_KEY;
   <title>Admin — Katy & Woof</title>
   <link rel="stylesheet" href="css/admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script>
     const API  = <?php echo json_encode($apiBase, JSON_UNESCAPED_SLASHES); ?>;
     const AKEY = <?php echo json_encode($adminKey); ?>;
