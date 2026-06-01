@@ -29,7 +29,7 @@ include 'header.php';
               ['fa-brands fa-whatsapp','WhatsApp','+56 9 7688 6481','https://wa.me/56976886481'],
               ['fa-location-dot','Ubicación','La Serena, Chile','#'],
               ['fa-clock','Horario','Lunes a Sábado, 09:00 – 18:00 hrs','#'],
-              ['fa-globe','Sitio web','www.retratosdemascotas.cl','https://www.retratosdemascotas.cl'],
+              ['fa-globe','Sitio web','www.retratodemascotas.cl','https://www.retratodemascotas.cl'],
             ];
             foreach($contacts as $i => $c): ?>
             <a href="<?php echo $c[3]; ?>" <?php echo $c[3]!='#'?'target="_blank"':''; ?>

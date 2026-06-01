@@ -74,6 +74,24 @@ body {
   line-height: 1.6;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('../img/flower-pattern.png');
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity var(--transition);
+}
+
+body.light-theme::before {
+  filter: invert(1) brightness(0.8);
+  opacity: 0.03;
+}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--dark); }
