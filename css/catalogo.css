@@ -1,4 +1,9 @@
-@media (max-width: 900px) {
+/* ═════════════════════════════════════════════════════════════════════════════
+   CATALOG RESPONSIVE - Standardized Breakpoints
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* MEDIUM (768px) - Tablets */
+@media (max-width: 768px) {
   .catalog-sidebar {
     display: none;
   }
@@ -9,7 +14,9 @@
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
-@media (max-width: 480px) {
+
+/* SMALL (640px) - Mobile */
+@media (max-width: 640px) {
   #productsGrid {
     grid-template-columns: 1fr !important;
   }

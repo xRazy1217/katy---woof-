@@ -37,13 +37,15 @@ include 'header.php';
   <div class="container" style="padding-top:3rem;padding-bottom:5rem">
 
     <!-- BREADCRUMB -->
-    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--mid);margin-bottom:2.5rem">
-      <a href="<?php echo $base; ?>/" style="color:var(--mid);transition:color 0.2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--mid)'">Inicio</a>
-      <span>/</span>
-      <a href="<?php echo $base; ?>/catalogo.php" style="color:var(--mid);transition:color 0.2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--mid)'">Catálogo</a>
-      <span>/</span>
-      <span style="color:var(--white)"><?php echo htmlspecialchars($p['name']); ?></span>
-    </div>
+    <nav aria-label="Breadcrumb" style="margin-bottom:2.5rem">
+      <ol style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--mid);list-style:none;padding:0;margin:0">
+        <li><a href="<?php echo $base; ?>/" class="breadcrumb-link">Inicio</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="<?php echo $base; ?>/catalogo.php" class="breadcrumb-link">Catálogo</a></li>
+        <li aria-hidden="true">/</li>
+        <li><span style="color:var(--white)"><?php echo htmlspecialchars($p['name']); ?></span></li>
+      </ol>
+    </nav>
 
     <!-- PRODUCTO PRINCIPAL -->
     <div class="grid-2" style="gap:4rem;margin-bottom:5rem">
@@ -60,16 +62,20 @@ include 'header.php';
           <?php endif; ?>
         </div>
         <?php if($gallery): ?>
-        <div style="display:flex;gap:0.8rem;margin-top:1rem;overflow-x:auto;padding-bottom:0.5rem">
-          <div style="width:72px;height:72px;border-radius:0.5rem;overflow:hidden;cursor:pointer;border:2px solid var(--accent);flex-shrink:0"
-               onclick="setImg('<?php echo $p['image_url']; ?>', this)">
-            <img src="<?php echo $p['image_url']; ?>" style="width:100%;height:100%;object-fit:cover"/>
-          </div>
-          <?php foreach($gallery as $img): ?>
-          <div style="width:72px;height:72px;border-radius:0.5rem;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:border-color 0.2s"
-               onclick="setImg('<?php echo $img; ?>', this)">
-            <img src="<?php echo $img; ?>" style="width:100%;height:100%;object-fit:cover"/>
-          </div>
+        <div id="galleryThumbnails" style="display:flex;gap:0.8rem;margin-top:1rem;overflow-x:auto;padding-bottom:0.5rem" role="group" aria-label="Product gallery">
+          <button class="gallery-thumbnail gallery-thumbnail--active"
+                  data-src="<?php echo $p['image_url']; ?>"
+                  style="width:72px;height:72px;border-radius:0.5rem;overflow:hidden;cursor:pointer;border:2px solid var(--accent);flex-shrink:0;background:none;padding:0;margin:0"
+                  aria-label="View main product image">
+            <img src="<?php echo $p['image_url']; ?>" style="width:100%;height:100%;object-fit:cover" alt=""/>
+          </button>
+          <?php foreach($gallery as $idx => $img): ?>
+          <button class="gallery-thumbnail"
+                  data-src="<?php echo $img; ?>"
+                  style="width:72px;height:72px;border-radius:0.5rem;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:border-color 0.2s;background:none;padding:0;margin:0"
+                  aria-label="View product image <?php echo $idx + 2; ?>">
+            <img src="<?php echo $img; ?>" style="width:100%;height:100%;object-fit:cover" alt=""/>
+          </button>
           <?php endforeach; ?>
         </div>
         <?php endif; ?>
@@ -103,24 +109,43 @@ include 'header.php';
 
         <!-- CANTIDAD -->
         <?php if($p['stock_status'] !== 'outofstock'): ?>
-        <div style="margin-bottom:1.5rem">
-          <label>Cantidad</label>
+        <fieldset id="quantitySelector" style="margin-bottom:1.5rem;border:none;padding:0;margin:0">
+          <legend style="font-size:0.9rem;font-weight:500;color:var(--white);margin-bottom:0.4rem">Cantidad</legend>
           <div style="display:flex;align-items:center;gap:0.8rem;margin-top:0.4rem">
-            <button onclick="changeQty(-1)" style="width:40px;height:40px;border-radius:50%;background:var(--dark2);border:1px solid rgba(255,255,255,0.1);color:var(--white);font-size:1.2rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">−</button>
-            <span id="qtyDisplay" style="font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;min-width:30px;text-align:center">1</span>
-            <button onclick="changeQty(1)"  style="width:40px;height:40px;border-radius:50%;background:var(--dark2);border:1px solid rgba(255,255,255,0.1);color:var(--white);font-size:1.2rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">+</button>
+            <button id="qtyDecrement"
+                    data-action="decrease"
+                    class="qty-btn-product"
+                    style="width:40px;height:40px;border-radius:50%;background:var(--dark2);border:1px solid rgba(255,255,255,0.1);color:var(--white);font-size:1.2rem;cursor:pointer;transition:all 0.2s"
+                    aria-label="Decrease quantity">−</button>
+            <span id="qtyDisplay"
+                  style="font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;min-width:30px;text-align:center"
+                  aria-live="polite"
+                  aria-atomic="true">1</span>
+            <button id="qtyIncrement"
+                    data-action="increase"
+                    class="qty-btn-product"
+                    style="width:40px;height:40px;border-radius:50%;background:var(--dark2);border:1px solid rgba(255,255,255,0.1);color:var(--white);font-size:1.2rem;cursor:pointer;transition:all 0.2s"
+                    aria-label="Increase quantity">+</button>
             <?php if($p['stock_quantity'] > 0): ?>
-            <span style="font-size:0.78rem;color:var(--mid)"><?php echo $p['stock_quantity']; ?> disponibles</span>
+            <span style="font-size:0.78rem;color:var(--mid)" aria-label="Stock available"><?php echo $p['stock_quantity']; ?> disponibles</span>
             <?php endif; ?>
           </div>
-        </div>
+        </fieldset>
 
         <!-- BOTONES -->
         <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem">
-          <button class="btn btn-primary btn-lg" onclick="addToCartProduct()" style="flex:1;justify-content:center">
+          <button id="addToCartBtn"
+                  data-product-id="<?php echo $p['id']; ?>"
+                  data-qty-display="qtyDisplay"
+                  class="btn btn-primary btn-lg"
+                  style="flex:1;justify-content:center">
             <i class="fa-solid fa-bag-shopping"></i> Agregar al carrito
           </button>
-          <a href="https://wa.me/56976886481?text=Hola!%20Me%20interesa%20el%20producto:%20<?php echo urlencode($p['name']); ?>" target="_blank" class="btn btn-outline">
+          <a href="https://wa.me/56976886481?text=Hola!%20Me%20interesa%20el%20producto:%20<?php echo urlencode($p['name']); ?>"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-outline"
+             aria-label="Contact us on WhatsApp about this product">
             <i class="fa-brands fa-whatsapp"></i>
           </a>
         </div>
@@ -161,15 +186,23 @@ include 'header.php';
 
     <!-- RELACIONADOS -->
     <?php if($related): ?>
-    <div>
-      <h2 style="font-size:1.5rem;margin-bottom:2rem">También te puede <span class="accent">interesar</span></h2>
+    <section aria-labelledby="relatedProductsTitle">
+      <h2 id="relatedProductsTitle" style="font-size:1.5rem;margin-bottom:2rem">También te puede <span class="accent">interesar</span></h2>
       <div class="grid-4">
         <?php foreach($related as $r): ?>
-        <div class="card product-card" onclick="window.location='<?php echo $base; ?>/producto.php?id=<?php echo $r['id']; ?>'">
+        <article class="card product-card">
           <div class="product-card-img">
-            <img src="<?php echo $r['image_url'] ?: $base.'/uploads/placeholder-product.svg'; ?>" alt="<?php echo htmlspecialchars($r['name']); ?>" loading="lazy"/>
+            <a href="<?php echo $base; ?>/producto.php?id=<?php echo $r['id']; ?>"
+               class="product-card-link"
+               aria-label="View <?php echo htmlspecialchars($r['name']); ?>">
+              <img src="<?php echo $r['image_url'] ?: $base.'/uploads/placeholder-product.svg'; ?}"
+                   alt="<?php echo htmlspecialchars($r['name']); ?>"
+                   loading="lazy"/>
+            </a>
             <div class="product-card-overlay">
-              <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();CartManager.add(<?php echo $r['id']; ?>)">
+              <button class="btn btn-ghost btn-sm related-add-cart"
+                      data-product-id="<?php echo $r['id']; ?>"
+                      aria-label="Add <?php echo htmlspecialchars($r['name']); ?> to cart">
                 <i class="fa-solid fa-bag-shopping"></i> Agregar
               </button>
             </div>
@@ -178,33 +211,125 @@ include 'header.php';
             <div class="product-card-name"><?php echo htmlspecialchars($r['name']); ?></div>
             <div class="product-card-footer">
               <span class="product-card-price"><?php echo fmtP($r['sale_price'] ?: $r['price']); ?></span>
-              <button class="add-cart-btn" onclick="event.stopPropagation();CartManager.add(<?php echo $r['id']; ?>)">+</button>
+              <button class="add-cart-btn related-add-cart"
+                      data-product-id="<?php echo $r['id']; ?>"
+                      aria-label="Quick add <?php echo htmlspecialchars($r['name']); ?>">+</button>
             </div>
           </div>
-        </div>
+        </article>
         <?php endforeach; ?>
       </div>
-    </div>
+    </section>
     <?php endif; ?>
   </div>
 </main>
 
+<style>
+.breadcrumb-link {
+  color: var(--mid);
+  transition: color var(--transition-base);
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus-visible {
+  color: var(--white);
+}
+
+.qty-btn-product {
+  transition: border-color var(--transition-base);
+}
+
+.qty-btn-product:hover,
+.qty-btn-product:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.gallery-thumbnail {
+  transition: border-color var(--transition-base);
+}
+
+.gallery-thumbnail:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.product-card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.product-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+}
+</style>
+
 <script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Product Page - Event Handlers
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 let qty = 1;
 const productId = <?php echo $p['id']; ?>;
 
-function changeQty(delta) {
-  qty = Math.max(1, qty + delta);
-  document.getElementById('qtyDisplay').textContent = qty;
+// Gallery image selection
+const galleryThumbnails = document.getElementById('galleryThumbnails');
+if (galleryThumbnails) {
+  galleryThumbnails.addEventListener('click', (e) => {
+    const btn = e.target.closest('.gallery-thumbnail');
+    if (!btn) return;
+
+    // Update main image
+    const src = btn.dataset.src;
+    document.getElementById('mainImg').src = src;
+
+    // Update active state
+    document.querySelectorAll('.gallery-thumbnail').forEach(t => {
+      t.style.borderColor = 'transparent';
+      t.classList.remove('gallery-thumbnail--active');
+    });
+    btn.style.borderColor = 'var(--accent)';
+    btn.classList.add('gallery-thumbnail--active');
+  });
 }
-function addToCartProduct() {
-  CartManager.add(productId, qty);
+
+// Quantity selector
+const qtyDecrement = document.getElementById('qtyDecrement');
+const qtyIncrement = document.getElementById('qtyIncrement');
+const qtyDisplay = document.getElementById('qtyDisplay');
+
+if (qtyDecrement) {
+  qtyDecrement.addEventListener('click', () => {
+    qty = Math.max(1, qty - 1);
+    qtyDisplay.textContent = qty;
+  });
 }
-function setImg(src, el) {
-  document.getElementById('mainImg').src = src;
-  document.querySelectorAll('[onclick^="setImg"]').forEach(e => e.style.borderColor = 'transparent');
-  el.style.borderColor = 'var(--accent)';
+
+if (qtyIncrement) {
+  qtyIncrement.addEventListener('click', () => {
+    qty = Math.max(1, qty + 1);
+    qtyDisplay.textContent = qty;
+  });
 }
+
+// Add to cart - main button
+const addToCartBtn = document.getElementById('addToCartBtn');
+if (addToCartBtn) {
+  addToCartBtn.addEventListener('click', () => {
+    CartManager.add(productId, qty);
+  });
+}
+
+// Add to cart - related products
+document.querySelectorAll('.related-add-cart').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const productId = parseInt(btn.dataset.productId, 10);
+    CartManager.add(productId, 1);
+  });
+});
 </script>
 
 <?php include 'footer.php'; ?>

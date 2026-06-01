@@ -1,6 +1,9 @@
-/* ── KATY & WOOF — app.js ── */
-// BASE se define en header.php como constante PHP → JS
-// const BASE = '<?php echo APP_URL; ?>'; ← ya está en el <head>
+/* ═══════════════════════════════════════════════════════════════════════════
+   KATY & WOOF — app.js
+   ═══════════════════════════════════════════════════════════════════════════
+   Modular JavaScript application with event delegation and no inline handlers.
+   BASE variable is injected by header.php
+   ═════════════════════════════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════
    HEADER SCROLL
@@ -172,12 +175,12 @@ const CartManager = {
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-price">${formatPrice(item.price)}</div>
           <div class="cart-item-qty">
-            <button class="qty-btn" onclick="CartManager.updateQty(${item.id}, ${item.quantity - 1})">−</button>
+            <button class="qty-btn qty-minus" data-item-id="${item.id}" data-action="decrease" aria-label="Decrease quantity">−</button>
             <span class="qty-num">${item.quantity}</span>
-            <button class="qty-btn" onclick="CartManager.updateQty(${item.id}, ${item.quantity + 1})">+</button>
+            <button class="qty-btn qty-plus" data-item-id="${item.id}" data-action="increase" aria-label="Increase quantity">+</button>
           </div>
         </div>
-        <button class="cart-item-remove" onclick="CartManager.remove(${item.id})">✕</button>
+        <button class="cart-item-remove" data-item-id="${item.id}" data-action="remove" aria-label="Remove from cart">✕</button>
       </div>
     `).join('');
 
@@ -192,6 +195,31 @@ const CartManager = {
     if (ship) ship.textContent = shipping === 0 ? 'Gratis' : formatPrice(shipping);
     if (tot)  tot.textContent  = formatPrice(total);
     if (footer) footer.style.display = 'block';
+
+    this._attachCartItemEvents();
+  },
+
+  _attachCartItemEvents() {
+    const list = document.getElementById('cartItemsList');
+    if (!list) return;
+
+    list.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+
+      const itemId = parseInt(btn.dataset.itemId, 10);
+      const action = btn.dataset.action;
+
+      if (action === 'increase') {
+        const item = this.items.find(i => i.id === itemId);
+        if (item) this.updateQty(itemId, item.quantity + 1);
+      } else if (action === 'decrease') {
+        const item = this.items.find(i => i.id === itemId);
+        if (item && item.quantity > 1) this.updateQty(itemId, item.quantity - 1);
+      } else if (action === 'remove') {
+        this.remove(itemId);
+      }
+    });
   },
 
   open() {
@@ -212,9 +240,54 @@ const CartManager = {
 };
 
 /* ══════════════════════════════
-   INIT
+   APP INITIALIZATION
 ══════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  ThemeManager.init();
-  CartManager.init();
-});
+const App = {
+  init() {
+    ThemeManager.init();
+    CartManager.init();
+    this._setupEventDelegation();
+  },
+
+  _setupEventDelegation() {
+    // Theme toggle
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => ThemeManager.toggle());
+    }
+
+    // Navigation
+    const hamburger = document.getElementById('hamburger');
+    if (hamburger) {
+      hamburger.addEventListener('click', toggleNav);
+    }
+
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    if (userMenuBtn) {
+      userMenuBtn.addEventListener('click', toggleUserMenu);
+    }
+
+    // Cart
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+      cartBtn.addEventListener('click', () => CartManager.open());
+    }
+
+    const cartClose = document.getElementById('cartClose');
+    if (cartClose) {
+      cartClose.addEventListener('click', () => CartManager.close());
+    }
+
+    const cartOverlay = document.getElementById('cartOverlay');
+    if (cartOverlay) {
+      cartOverlay.addEventListener('click', () => CartManager.close());
+    }
+  }
+};
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => App.init());
+} else {
+  App.init();
+}

@@ -98,3 +98,36 @@ El sistema utiliza un router centralizado en `api/router.php`.
 1. Verifica que WAMP esté corriendo.
 2. Verifica que la BD `katywoof_ecommerce` exista.
 3. Verifica usuario/contraseña en `.env`.
+
+---
+
+## 🔑 CONEXIÓN SSH (SITEGROUND)
+
+Para conectarse al servidor de producción de **retratodemascotas.cl** vía SSH/SFTP y desplegar archivos, se utiliza la clave SSH configurada para este proyecto.
+
+### 1. Datos de Conexión (SiteGround)
+* **Host / IP:** `ssh.retratodemascotas.cl`
+* **Puerto:** `18765`
+* **Usuario:** `u60-vblm4bjad0ip`
+* **Directorio Web Remoto:** `/home/customer/www/retratodemascotas.cl/public_html/` (o abreviado: `www/retratodemascotas.cl/public_html/`)
+
+### 2. Ubicación de la Clave Privada
+La clave privada generada está almacenada localmente en la máquina del usuario en la siguiente ruta absoluta:
+`C:\Users\obal_\.gemini\antigravity\scratch\id_katywoof_siteground`
+
+### 3. Comandos de Utilidad
+
+* **Probar conexión SSH:**
+  ```powershell
+  ssh -i C:\Users\obal_\.gemini\antigravity\scratch\id_katywoof_siteground -p 18765 u60-vblm4bjad0ip@ssh.retratodemascotas.cl "echo 'Conexión Exitosa'"
+  ```
+
+* **Subir un archivo específico (ej. app.css):**
+  ```powershell
+  scp -i C:\Users\obal_\.gemini\antigravity\scratch\id_katywoof_siteground -P 18765 css/app.css u60-vblm4bjad0ip@ssh.retratodemascotas.cl:www/retratodemascotas.cl/public_html/css/
+  ```
+
+* **Acceso interactivo a la consola remota:**
+  ```powershell
+  ssh -i C:\Users\obal_\.gemini\antigravity\scratch\id_katywoof_siteground -p 18765 u60-vblm4bjad0ip@ssh.retratodemascotas.cl
+  ```

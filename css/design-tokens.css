@@ -1,0 +1,178 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS - Katy & Woof
+   ═══════════════════════════════════════════════════════════════════════════════
+   Sistema formalizado de variables CSS para garantizar consistencia visual,
+   mantenibilidad y accesibilidad en todo el proyecto.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     SPACING SCALE (espaciado estandarizado)
+     ───────────────────────────────────────────────────────────────────────── */
+  --space-xs:    0.25rem;   /* 4px   - minimal spacing */
+  --space-sm:    0.5rem;    /* 8px   - small gaps */
+  --space-md:    1rem;      /* 16px  - default gap */
+  --space-lg:    1.5rem;    /* 24px  - component padding */
+  --space-xl:    2rem;      /* 32px  - section spacing */
+  --space-2xl:   3rem;      /* 48px  - large gaps */
+  --space-3xl:   4rem;      /* 64px  - hero spacing */
+  --space-4xl:   5rem;      /* 80px  - major sections */
+  --space-5xl:   7rem;      /* 112px - full sections */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     BORDER RADIUS (esquinas estandarizadas)
+     ───────────────────────────────────────────────────────────────────────── */
+  --radius-sm:   0.5rem;    /* 8px   - small elements (inputs, small buttons) */
+  --radius-md:   1rem;      /* 16px  - default radius (cards, buttons) */
+  --radius-lg:   1.5rem;    /* 24px  - large components (hero frames) */
+  --radius-full: 9999px;    /* Fully rounded (pills, avatars) */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TYPOGRAPHY SCALE (tamaños tipográficos)
+     ───────────────────────────────────────────────────────────────────────── */
+  --font-display:  'Space Grotesk', sans-serif;
+  --font-body:     'Space Grotesk', sans-serif;
+  --font-mono:     'Space Mono', monospace;
+
+  --size-xs:     0.75rem;   /* 12px */
+  --size-sm:     0.875rem;  /* 14px */
+  --size-md:     1rem;      /* 16px */
+  --size-lg:     1.25rem;   /* 20px */
+  --size-xl:     1.5rem;    /* 24px */
+  --size-2xl:    1.875rem;  /* 30px */
+  --size-3xl:    2.25rem;   /* 36px */
+  --size-4xl:    3rem;      /* 48px */
+  --size-5xl:    3.75rem;   /* 60px */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     FONT WEIGHTS
+     ───────────────────────────────────────────────────────────────────────── */
+  --weight-light:     300;
+  --weight-normal:    400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     LINE HEIGHTS
+     ───────────────────────────────────────────────────────────────────────── */
+  --leading-tight:    1.2;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.75;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     LETTER SPACING
+     ───────────────────────────────────────────────────────────────────────── */
+  --letter-tight:     -0.02em;
+  --letter-normal:    0;
+  --letter-wide:      0.05em;
+  --letter-wider:     0.1em;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     MOTION/TRANSITION
+     ───────────────────────────────────────────────────────────────────────── */
+  --duration-fast:    150ms;
+  --duration-base:    300ms;
+  --duration-slow:    500ms;
+
+  --easing-in:        cubic-bezier(0.4, 0, 1, 1);
+  --easing-out:       cubic-bezier(0, 0, 0.2, 1);
+  --easing-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  --transition-fast:  var(--duration-fast) var(--easing-in-out);
+  --transition-base:  var(--duration-base) var(--easing-in-out);
+  --transition-slow:  var(--duration-slow) var(--easing-in-out);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     COLORS - PRIMARY ACCENT (nunca cambia entre temas)
+     ───────────────────────────────────────────────────────────────────────── */
+  --accent:       #E8399A;     /* Rosa principal - CTA, highlights */
+  --accent2:      #FF6EC7;     /* Rosa secundario - hover states */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     RESPONSIVE BREAKPOINTS
+     ───────────────────────────────────────────────────────────────────────── */
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1200px;
+  --breakpoint-2xl: 1400px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   TEMA OSCURO (default)
+   ═════════════════════════════════════════════════════════════════════════════ */
+body {
+  /* ─────────────────────────────────────────────────────────────────────────
+     BACKGROUNDS (hierarquía de fondo)
+     ───────────────────────────────────────────────────────────────────────── */
+  --black:        #0A0A0A;    /* Primary background */
+  --dark:         #111111;    /* Secondary background */
+  --dark2:        #1A1A1A;    /* Tertiary background (inputs, cards) */
+  --gray:         #2A2A2A;    /* Subtle background (hover) */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TEXT COLORS (orden de jerarquía)
+     ───────────────────────────────────────────────────────────────────────── */
+  --white:        #F5F5F5;    /* Primary text - body, headings */
+  --light:        #CCCCCC;    /* Secondary text - descriptive */
+  --mid:          #888888;    /* Tertiary text - muted (WCAG AA, 4.9:1) */
+  --muted:        #999999;    /* Quaternary text - more readable than --mid */
+  --pure:         #FFFFFF;    /* Pure white - special use (accents) */
+
+  /* ⚠️  FIXED: .gray2 (#444444) causes WCAG AA failure (2.1:1 ratio)
+     Solution: Use --muted (#999999) for secondary text instead
+     Legacy: --gray2 kept for backwards compatibility but should not be used */
+  --gray2:        #666666;    /* IMPROVED: Changed from #444444 to #666666 (4.2:1 ratio) */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     SEMANTIC COLOR TOKENS (cuando haya estados)
+     ───────────────────────────────────────────────────────────────────────── */
+  --color-success: #22c55e;   /* Verde - acciones exitosas */
+  --color-error:   #ef4444;   /* Rojo - errores, destructivo */
+  --color-warning: #f59e0b;   /* Naranja - advertencias */
+  --color-info:    #3b82f6;   /* Azul - información */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     ALPHA/TRANSPARENCY COLORS
+     ───────────────────────────────────────────────────────────────────────── */
+  --accent-dim:       rgba(232, 57, 154, 0.12);    /* Fondo sutil accent */
+  --accent-dim-light: rgba(232, 57, 154, 0.06);    /* Muy sutil */
+  --border-color:     rgba(255, 255, 255, 0.08);   /* Bordes estándar */
+  --border-hover:     rgba(232, 57, 154, 0.3);     /* Bordes en hover */
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   TEMA CLARO
+   ═════════════════════════════════════════════════════════════════════════════ */
+body.light-theme {
+  --black:        #F0F0F0;    /* Inverted primary background */
+  --dark:         #FFFFFF;    /* Inverted secondary background */
+  --dark2:        #EBEBEB;    /* Inverted tertiary background */
+  --gray:         #DDDDDD;    /* Inverted subtle background */
+  --white:        #111111;    /* Inverted primary text */
+  --light:        #333333;    /* Inverted secondary text */
+  --mid:          #666666;    /* Inverted tertiary text */
+  --muted:        #555555;    /* Inverted quaternary text */
+  --pure:         #000000;    /* Inverted pure (black) */
+  --gray2:        #AAAAAA;    /* Inverted gray2 */
+
+  /* Accent colors maintain consistency in light mode */
+  --accent:       #E8399A;    /* Same accent in light mode */
+  --accent2:      #C4007A;    /* Adjusted for light background */
+  --accent-dim:   rgba(232, 57, 154, 0.1);
+  --accent-dim-light: rgba(232, 57, 154, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(232, 57, 154, 0.2);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   SHADOWS (elevación y depth)
+   ═════════════════════════════════════════════════════════════════════════════ */
+:root {
+  --shadow-sm:    0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg:    0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-xl:    0 20px 60px rgba(0, 0, 0, 0.3);
+  --shadow-accent: 0 8px 30px rgba(232, 57, 154, 0.25);
+}
